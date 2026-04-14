@@ -32,5 +32,7 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <!-- Bearer-only API tests: avoid session/cookie auth being treated as stateful -->
+        <env name="SANCTUM_STATEFUL_DOMAINS" value="phpunit.nonexistent"/>
     </php>
 </phpunit>
