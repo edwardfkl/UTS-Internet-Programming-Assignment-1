@@ -4,9 +4,16 @@
     'sort',
     'dir',
     'route',
+    'preserveQuery' => ['q'],
 ])
 @php
-    $query = array_filter(['q' => request('q')], fn ($v) => $v !== null && $v !== '');
+    $query = [];
+    foreach ((array) $preserveQuery as $key) {
+        $v = request($key);
+        if ($v !== null && $v !== '') {
+            $query[$key] = $v;
+        }
+    }
     if ($sort === $column) {
         $nextDir = $dir === 'asc' ? 'desc' : 'asc';
     } else {

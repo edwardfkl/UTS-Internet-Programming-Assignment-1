@@ -58,6 +58,10 @@
   },
   "home": {
     "catalogueSr": "商品カタログ",
+    "searchLabel": "商品を検索",
+    "searchPlaceholder": "名前・説明で絞り込み…",
+    "noMatches": "該当する商品はありません。",
+    "emptyCatalog": "表示できる商品がありません。",
     "addToCart": "カートに追加",
     "adding": "追加中…",
     "qtyFor": "{name} の数量"

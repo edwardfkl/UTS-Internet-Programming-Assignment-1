@@ -21,15 +21,5 @@ class AdminUserSeeder extends Seeder
                 'is_admin' => true,
             ],
         );
-
-        // Test admin (Blade /admin + API is_admin).
-        User::query()->updateOrCreate(
-            ['email' => 'edwardfan706@gmail.com'],
-            [
-                'name' => 'edwardfkl',
-                'password' => Hash::make('123456'),
-                'is_admin' => true,
-            ],
-        );
     }
 }

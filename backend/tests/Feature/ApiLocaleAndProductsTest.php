@@ -43,6 +43,29 @@ class ApiLocaleAndProductsTest extends TestCase
         $this->assertSame(['Alpha Tool', 'Zebra Kit'], $names);
     }
 
+    public function test_products_index_filters_by_query_parameter(): void
+    {
+        Product::factory()->create(['name' => 'Acme Glue', 'description' => 'Strong bond']);
+        Product::factory()->create(['name' => 'Beta Tape', 'description' => 'Sealing']);
+
+        $this->getJson('/api/products?q=glue')
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.name', 'Acme Glue');
+
+        $this->getJson('/api/products?q=seal')
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.name', 'Beta Tape');
+    }
+
+    public function test_products_index_rejects_overlong_search_query(): void
+    {
+        $this->getJson('/api/products?q='.str_repeat('a', 121))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['q']);
+    }
+
     public function test_product_show_returns_fields(): void
     {
         $product = Product::factory()->create([

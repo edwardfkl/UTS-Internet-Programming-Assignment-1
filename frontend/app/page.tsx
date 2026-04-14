@@ -11,11 +11,15 @@ import { fetchProducts } from "@/lib/api";
 import { money, parsePrice } from "@/lib/money";
 import type { Product } from "@/lib/types";
 
+const SEARCH_DEBOUNCE_MS = 280;
+
 export default function Home() {
   const { t, tf } = useLocale();
   const [products, setProducts] = useState<Product[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [catalogError, setCatalogError] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [qtyByProduct, setQtyByProduct] = useState<Record<number, number>>({});
   const {
     cartLines,
@@ -31,21 +35,32 @@ export default function Home() {
     startNewCart,
   } = useCart();
 
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setDebouncedSearch(searchInput.trim());
+    }, SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(id);
+  }, [searchInput]);
+
   const loadCatalog = useCallback(async () => {
     setCatalogError(null);
     setCatalogLoading(true);
     try {
-      const plist = await fetchProducts();
+      const plist = await fetchProducts(debouncedSearch || undefined);
       setProducts(plist);
-      const initialQty: Record<number, number> = {};
-      for (const p of plist) initialQty[p.id] = 1;
-      setQtyByProduct(initialQty);
+      setQtyByProduct((prev) => {
+        const next = { ...prev };
+        for (const p of plist) {
+          if (next[p.id] === undefined) next[p.id] = 1;
+        }
+        return next;
+      });
     } catch (e) {
       setCatalogError(e instanceof Error ? e.message : t("common.failedToLoad"));
     } finally {
       setCatalogLoading(false);
     }
-  }, [t]);
+  }, [t, debouncedSearch]);
 
   useEffect(() => {
     void loadCatalog();
@@ -65,9 +80,25 @@ export default function Home() {
 
       <main className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[1fr_380px] sm:px-6">
         <section aria-labelledby="products-heading">
-          <h2 id="products-heading" className="sr-only">
-            {t("home.catalogueSr")}
-          </h2>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <h2 id="products-heading" className="font-display text-xl font-semibold text-stone-900">
+              {t("home.catalogueSr")}
+            </h2>
+            <div className="w-full sm:max-w-md">
+              <label htmlFor="catalog-search" className="mb-1 block text-xs font-medium text-stone-600">
+                {t("home.searchLabel")}
+              </label>
+              <input
+                id="catalog-search"
+                type="search"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder={t("home.searchPlaceholder")}
+                autoComplete="off"
+                className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 shadow-sm outline-none ring-amber-800/20 placeholder:text-stone-400 focus:border-amber-800 focus:ring-2"
+              />
+            </div>
+          </div>
           {catalogLoading ? (
             <div className="grid gap-4 sm:grid-cols-2">
               {[1, 2, 3, 4].map((k) => (
@@ -77,6 +108,10 @@ export default function Home() {
                 />
               ))}
             </div>
+          ) : products.length === 0 ? (
+            <p className="rounded-xl border border-dashed border-stone-200 bg-stone-50/80 px-4 py-10 text-center text-sm text-stone-600">
+              {debouncedSearch ? t("home.noMatches") : t("home.emptyCatalog")}
+            </p>
           ) : (
             <ul className="grid gap-5 sm:grid-cols-2">
               {products.map((p) => (

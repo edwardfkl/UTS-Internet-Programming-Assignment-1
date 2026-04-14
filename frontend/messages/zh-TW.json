@@ -58,6 +58,10 @@
   },
   "home": {
     "catalogueSr": "商品目錄",
+    "searchLabel": "搜尋商品",
+    "searchPlaceholder": "輸入關鍵字即時篩選名稱或描述…",
+    "noMatches": "沒有符合搜尋嘅商品。",
+    "emptyCatalog": "暫時未有商品。",
     "addToCart": "加入購物車",
     "adding": "加入中…",
     "qtyFor": "{name} 的數量"

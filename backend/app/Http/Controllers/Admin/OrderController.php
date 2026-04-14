@@ -16,6 +16,12 @@ class OrderController extends Controller
     public function index(Request $request): View
     {
         $q = AdminListRequest::search($request);
+        $rawStatus = $request->query('status');
+        $statusFilter = null;
+        if (is_string($rawStatus) && $rawStatus !== '' && in_array($rawStatus, [Order::STATUS_CART, Order::STATUS_PENDING_PAYMENT], true)) {
+            $statusFilter = $rawStatus;
+        }
+
         [$sort, $dir] = AdminListRequest::sort(
             $request,
             ['id', 'status', 'placed_at', 'created_at', 'updated_at'],
@@ -26,6 +32,10 @@ class OrderController extends Controller
         $query = Order::query()
             ->with('user')
             ->withCount('items');
+
+        if ($statusFilter !== null) {
+            $query->where('status', $statusFilter);
+        }
 
         if ($q !== null) {
             $like = '%'.$q.'%';
@@ -49,7 +59,7 @@ class OrderController extends Controller
 
         $orders = $query->paginate(25)->withQueryString();
 
-        return view('admin.orders.index', compact('orders', 'sort', 'dir', 'q'));
+        return view('admin.orders.index', compact('orders', 'sort', 'dir', 'q', 'statusFilter'));
     }
 
     public function show(Order $order): View

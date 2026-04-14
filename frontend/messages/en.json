@@ -58,6 +58,10 @@
   },
   "home": {
     "catalogueSr": "Product catalogue",
+    "searchLabel": "Search products",
+    "searchPlaceholder": "Type to filter by name or description…",
+    "noMatches": "No products match your search.",
+    "emptyCatalog": "No products are available right now.",
     "addToCart": "Add to cart",
     "adding": "Adding…",
     "qtyFor": "Quantity for {name}"

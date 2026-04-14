@@ -117,7 +117,7 @@ project-root/
 │   │   # Auth, Profile, Product, Cart*, Checkout
 │   ├── app/Models/           # User, Product, Order, OrderItem
 │   └── database/migrations/  # users, products, orders, order_items, tokens, …
-├── database/                 # e.g. products_seed.json for reference / export
+├── database/                 # database_export.sql (demo DB dump), products_seed.json
 └── README.md
 ```
 
@@ -174,7 +174,9 @@ The REST paths are `/api/cart/...`, but persistence is **orders + order_items**,
 
 Guest carts are identified by an `X-Cart-Token` header (UUID). The SPA stores that token in `localStorage`, while **cart lines are persisted in the database** under `orders` / `order_items`. To reopen the same cart after clearing site data or on another device, use the UI **Copy cart link** or open the site with `?cart=<uuid>` (the query param is read once and then removed from the address bar).
 
-**Routes:** `/` — catalogue + cart sidebar; `/products/[id]` — product detail; `/checkout` — English checkout (ATM / PayID / BPAY placeholders; redirects to login if not authenticated); confirmation screen after **Place order**.
+**Routes:** `/` — catalogue + cart sidebar; **live catalogue search** (debounced) calls the API with `q` as you type. `/products/[id]` — product detail; `/checkout` — English checkout (ATM / PayID / BPAY placeholders; redirects to login if not authenticated); confirmation screen after **Place order**.
+
+**Admin orders:** the orders list supports a **status** filter (`All` / **Draft carts only** / **Pending payment only**) so tutors can isolate in-progress carts (Assignment 2 “view all users’ shopping carts”).
 
 ### SQLite instead of MySQL (optional)
 
@@ -188,9 +190,15 @@ php artisan migrate:fresh --seed
 
 PHPUnit still uses an in-memory SQLite database via `phpunit.xml`; that is unchanged.
 
+## Challenges overcome
+
+I have been working as a software engineer for about five years, with most of that time spent designing and building websites, so wiring a decoupled storefront to a REST API and a relational database did not feel technically difficult—the core assignment was close to routine work for my background. The bulk of the effort went into meeting coursework expectations clearly (full CRUD on persisted cart data, SPA-style behaviour with client-side navigation and `fetch` instead of full page reloads for cart actions, and tidy separation between the Next.js app and Laravel) rather than learning fundamentals from scratch. I spent more attention on polish and reproducibility: input validation, sensible API errors instead of silent failures, CORS and Sanctum token behaviour documented for whoever runs the repo, and a readme detailed enough to mark and demo quickly. Compared with typical production pressures such as scaling, compliance, or legacy integrations, the difficulty here was minimal, but packaging a complete vertical slice still made a useful checklist exercise.
+
 ## Database export (backup)
 
-To snapshot the schema and data for archival or moving environments:
+A committed snapshot for submission is at **`database/database_export.sql`** (SQLite-format SQL from `php artisan migrate:fresh --seed`, then trimmed to demo-only rows: default admin user plus seeded products). Markers can inspect schema and seed data directly; to load into SQLite, point `DB_DATABASE` at a file and run `sqlite3 your.db < database/database_export.sql` (or import via your SQL client).
+
+To snapshot your own environment (e.g. MySQL in production):
 
 - **MySQL**: `mysqldump -u USER -p studio_supply > database_export.sql`
 - **SQLite**: `sqlite3 backend/database/database.sqlite .dump > database_export.sql`
@@ -201,7 +209,7 @@ To snapshot the schema and data for archival or moving environments:
 
 | Method | Path | Notes |
 |--------|------|--------|
-| GET | `/api/products` | All products |
+| GET | `/api/products` | All products; optional query `q` (max 120 chars) filters by name or description (substring match) |
 | GET | `/api/products/{id}` | One product (`404` if missing) |
 | POST | `/api/cart/sessions` | Create a cart session; returns `token` |
 | GET | `/api/cart` | `X-Cart-Token` (+ Bearer if order is linked to a user) |

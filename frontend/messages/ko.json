@@ -58,6 +58,10 @@
   },
   "home": {
     "catalogueSr": "상품 카탈로그",
+    "searchLabel": "상품 검색",
+    "searchPlaceholder": "이름·설명으로 필터…",
+    "noMatches": "검색과 일치하는 상품이 없습니다.",
+    "emptyCatalog": "표시할 상품이 없습니다.",
     "addToCart": "장바구니 담기",
     "adding": "담는 중…",
     "qtyFor": "{name} 수량"

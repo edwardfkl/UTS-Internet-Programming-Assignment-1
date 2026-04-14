@@ -9,6 +9,15 @@
     <form method="get" action="{{ route('admin.orders.index') }}" class="mt-6 flex flex-wrap items-end gap-3">
         <input type="hidden" name="sort" value="{{ $sort }}">
         <input type="hidden" name="dir" value="{{ $dir }}">
+        <div class="min-w-[180px]">
+            <label for="orders-status" class="mb-1 block text-xs font-medium text-zinc-600">{{ __('admin.orders.filter_status') }}</label>
+            <select id="orders-status" name="status"
+                    class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-900">
+                <option value="" @selected($statusFilter === null)>{{ __('admin.orders.filter_status_all') }}</option>
+                <option value="cart" @selected($statusFilter === 'cart')>{{ __('admin.orders.filter_status_cart') }}</option>
+                <option value="pending_payment" @selected($statusFilter === 'pending_payment')>{{ __('admin.orders.filter_status_pending') }}</option>
+            </select>
+        </div>
         <div class="min-w-[200px] flex-1">
             <label for="orders-q" class="mb-1 block text-xs font-medium text-zinc-600">{{ __('admin.common.search') }}</label>
             <input id="orders-q" type="search" name="q" value="{{ $q ?? '' }}"
@@ -17,7 +26,7 @@
         </div>
         <button type="submit"
                 class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">{{ __('admin.common.search_submit') }}</button>
-        @if (! empty($q))
+        @if (! empty($q) || $statusFilter !== null)
             <a href="{{ route('admin.orders.index', ['sort' => $sort, 'dir' => $dir]) }}"
                class="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-50">{{ __('admin.common.clear') }}</a>
         @endif
@@ -27,14 +36,14 @@
         <table class="min-w-full divide-y divide-zinc-200 text-sm">
             <thead class="bg-zinc-50 text-left text-xs font-medium uppercase tracking-wide text-zinc-600">
             <tr>
-                <x-admin.sort-th :label="__('admin.orders.col_id')" column="id" :sort="$sort" :dir="$dir" route="admin.orders.index"/>
+                <x-admin.sort-th :label="__('admin.orders.col_id')" column="id" :sort="$sort" :dir="$dir" route="admin.orders.index" :preserve-query="['q', 'status']"/>
                 <th class="px-4 py-3">{{ __('admin.orders.col_token') }}</th>
-                <x-admin.sort-th :label="__('admin.orders.col_status')" column="status" :sort="$sort" :dir="$dir" route="admin.orders.index"/>
+                <x-admin.sort-th :label="__('admin.orders.col_status')" column="status" :sort="$sort" :dir="$dir" route="admin.orders.index" :preserve-query="['q', 'status']"/>
                 <th class="px-4 py-3">{{ __('admin.orders.col_user') }}</th>
                 <th class="px-4 py-3">{{ __('admin.orders.col_lines') }}</th>
-                <x-admin.sort-th :label="__('admin.orders.col_placed')" column="placed_at" :sort="$sort" :dir="$dir" route="admin.orders.index"/>
-                <x-admin.sort-th :label="__('admin.orders.col_created')" column="created_at" :sort="$sort" :dir="$dir" route="admin.orders.index"/>
-                <x-admin.sort-th :label="__('admin.orders.col_updated')" column="updated_at" :sort="$sort" :dir="$dir" route="admin.orders.index"/>
+                <x-admin.sort-th :label="__('admin.orders.col_placed')" column="placed_at" :sort="$sort" :dir="$dir" route="admin.orders.index" :preserve-query="['q', 'status']"/>
+                <x-admin.sort-th :label="__('admin.orders.col_created')" column="created_at" :sort="$sort" :dir="$dir" route="admin.orders.index" :preserve-query="['q', 'status']"/>
+                <x-admin.sort-th :label="__('admin.orders.col_updated')" column="updated_at" :sort="$sort" :dir="$dir" route="admin.orders.index" :preserve-query="['q', 'status']"/>
                 <th class="px-4 py-3 text-right">{{ __('admin.orders.col_view_edit') }}</th>
             </tr>
             </thead>

@@ -81,8 +81,11 @@ export async function ensureCartToken(): Promise<string> {
   return createCartSession();
 }
 
-export async function fetchProducts(): Promise<Product[]> {
-  const res = await fetch(`${apiBase()}/api/products`, {
+export async function fetchProducts(search?: string): Promise<Product[]> {
+  const q = search?.trim();
+  const url = new URL(`${apiBase().replace(/\/$/, "")}/api/products`);
+  if (q) url.searchParams.set("q", q);
+  const res = await fetch(url.toString(), {
     headers: { Accept: "application/json" },
     cache: "no-store",
   });
