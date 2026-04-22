@@ -81,14 +81,7 @@ export default function Home() {
       <main className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[1fr_380px] sm:px-6">
         <section aria-labelledby="products-heading">
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <h2 id="products-heading" className="font-display text-xl font-semibold text-stone-900">
-              {t("home.catalogueSr")}
-            </h2>
-            <div className="w-full sm:max-w-md">
-              <label htmlFor="catalog-search" className="mb-1 block text-xs font-medium text-stone-600">
-                {t("home.searchLabel")}
-              </label>
-              <input
+            <input
                 id="catalog-search"
                 type="search"
                 value={searchInput}
@@ -96,8 +89,12 @@ export default function Home() {
                 placeholder={t("home.searchPlaceholder")}
                 autoComplete="off"
                 className="w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 shadow-sm outline-none ring-amber-800/20 placeholder:text-stone-400 focus:border-amber-800 focus:ring-2"
-              />
-            </div>
+            />
+          </div>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <h2 id="products-heading" className="font-display text-xl font-semibold text-stone-900">
+              {t("home.catalogueSr")}
+            </h2>
           </div>
           {catalogLoading ? (
             <div className="grid gap-4 sm:grid-cols-2">
