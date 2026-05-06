@@ -53,3 +53,5 @@ Route::get('/cart', [CartController::class, 'show']);
 Route::post('/cart/items', [CartController::class, 'storeItem']);
 Route::patch('/cart/items/{cartItem}', [CartController::class, 'updateItem']);
 Route::delete('/cart/items/{cartItem}', [CartController::class, 'destroyItem']);
+
+Route::get('/orders', [OrderController::class, 'userOrders']);

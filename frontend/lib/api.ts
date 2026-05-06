@@ -245,3 +245,9 @@ export async function deleteCartItem(token: string, cartItemId: number): Promise
     throw new Error(`Could not remove item (HTTP ${res.status})`);
   }
 }
+
+export async function fetchUserOrders() {
+  const response = await fetch(`${apiBase()}/api/orders`);
+  if (!response.ok) throw new Error("Failed to fetch orders");
+  return response.json();
+}

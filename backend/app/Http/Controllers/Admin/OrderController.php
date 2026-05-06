@@ -124,4 +124,9 @@ class OrderController extends Controller
 
         return redirect()->route('admin.orders.show', $order)->with('success', 'Order updated.');
     }
+
+    // Dont know how to continue
+    public function userOrders(Request $request) {
+        return $request->user()->orders()->latest()->get();
+    }
 }
