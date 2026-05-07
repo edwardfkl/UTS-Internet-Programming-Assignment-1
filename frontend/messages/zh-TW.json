@@ -70,7 +70,8 @@
     "breadcrumbProduct": "商品",
     "backToCatalogue": "返回目錄",
     "notFoundHint": "此商品可能已下架或連結無效。",
-    "detailQtySr": "數量"
+    "detailQtySr": "數量",
+    "reviewCount": "{count}個評論"
   },
   "login": {
     "title": "登入",

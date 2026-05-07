@@ -70,7 +70,8 @@
     "breadcrumbProduct": "Product",
     "backToCatalogue": "Back to catalogue",
     "notFoundHint": "This product may have been removed or the link is invalid.",
-    "detailQtySr": "Quantity"
+    "detailQtySr": "Quantity",
+    "reviewCount": "{count} reviews"
   },
   "login": {
     "title": "Log in",

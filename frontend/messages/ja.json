@@ -70,7 +70,8 @@
     "breadcrumbProduct": "商品",
     "backToCatalogue": "カタログに戻る",
     "notFoundHint": "この商品は削除されたか、リンクが無効です。",
-    "detailQtySr": "数量"
+    "detailQtySr": "数量",
+    "reviewCount": "{count}件のレビュー"
   },
   "login": {
     "title": "ログイン",

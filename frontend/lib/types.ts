@@ -50,6 +50,8 @@ export type Product = {
   price: string;
   image_url: string | null;
   stock: number;
+  average_rating?: number;
+  review_count?: number;
 };
 
 export type CartLine = {

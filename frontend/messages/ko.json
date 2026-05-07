@@ -70,7 +70,8 @@
     "breadcrumbProduct": "상품",
     "backToCatalogue": "카탈로그로",
     "notFoundHint": "삭제되었거나 링크가 잘못된 상품입니다.",
-    "detailQtySr": "수량"
+    "detailQtySr": "수량",
+    "reviewCount": "리뷰 {count}개"
   },
   "login": {
     "title": "로그인",
