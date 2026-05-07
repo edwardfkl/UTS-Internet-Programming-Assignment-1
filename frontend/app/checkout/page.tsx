@@ -47,6 +47,8 @@ export default function CheckoutPage() {
     country: "Australia",
   });
 
+  const [promoCode, setPromoCode] = useState<string>("");
+
   useEffect(() => {
     if (!authReady) return;
     if (!user) {
@@ -81,12 +83,7 @@ export default function CheckoutPage() {
   }, [authReady, user, router]);
 
   useEffect(() => {
-    if (
-      cartLoading ||
-      done ||
-      cartLines.length > 0 ||
-      cartStatus !== "cart"
-    ) {
+    if (cartLoading || done || cartLines.length > 0 || cartStatus !== "cart") {
       return;
     }
     router.replace("/");
@@ -98,12 +95,17 @@ export default function CheckoutPage() {
     if (!cartToken || cartLines.length === 0 || !user) return;
     setSubmitting(true);
     try {
-      const result = await placeOrder(cartToken, method, shipping, saveToProfile);
+      const result = await placeOrder(
+        cartToken,
+        method,
+        shipping,
+        saveToProfile
+      );
       setDone(result);
       await resetCartSession();
     } catch (err) {
       setFormError(
-        err instanceof Error ? err.message : t("common.couldNotCheckout"),
+        err instanceof Error ? err.message : t("common.couldNotCheckout")
       );
     } finally {
       setSubmitting(false);
@@ -126,7 +128,7 @@ export default function CheckoutPage() {
       done.payment_method,
       done.order_reference,
       money.format(done.total),
-      t,
+      t
     );
     const s = done.shipping;
     return (
@@ -179,7 +181,9 @@ export default function CheckoutPage() {
                 <span>
                   {line.name} × {line.quantity}
                 </span>
-                <span className="tabular-nums">{money.format(line.line_total)}</span>
+                <span className="tabular-nums">
+                  {money.format(line.line_total)}
+                </span>
               </li>
             ))}
             <li className="flex justify-between border-t border-stone-200 pt-3 font-medium text-stone-900">
@@ -265,7 +269,10 @@ export default function CheckoutPage() {
           {tf("checkout.signedInDelivery", { email: user.email })}
         </p>
         <p className="mt-2 text-xs text-stone-500">
-          <Link href="/account" className="font-medium text-amber-900 hover:underline">
+          <Link
+            href="/account"
+            className="font-medium text-amber-900 hover:underline"
+          >
             {t("checkout.editProfileLink")}
           </Link>
         </p>
@@ -312,7 +319,10 @@ export default function CheckoutPage() {
                     required
                     value={shipping.recipient_name}
                     onChange={(e) =>
-                      setShipping((s) => ({ ...s, recipient_name: e.target.value }))
+                      setShipping((s) => ({
+                        ...s,
+                        recipient_name: e.target.value,
+                      }))
                     }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
@@ -325,7 +335,9 @@ export default function CheckoutPage() {
                     required
                     type="tel"
                     value={shipping.phone}
-                    onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
+                    onChange={(e) =>
+                      setShipping((s) => ({ ...s, phone: e.target.value }))
+                    }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
                 </div>
@@ -336,7 +348,9 @@ export default function CheckoutPage() {
                   <input
                     required
                     value={shipping.line1}
-                    onChange={(e) => setShipping((s) => ({ ...s, line1: e.target.value }))}
+                    onChange={(e) =>
+                      setShipping((s) => ({ ...s, line1: e.target.value }))
+                    }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
                 </div>
@@ -346,7 +360,9 @@ export default function CheckoutPage() {
                   </label>
                   <input
                     value={shipping.line2}
-                    onChange={(e) => setShipping((s) => ({ ...s, line2: e.target.value }))}
+                    onChange={(e) =>
+                      setShipping((s) => ({ ...s, line2: e.target.value }))
+                    }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
                 </div>
@@ -357,7 +373,9 @@ export default function CheckoutPage() {
                   <input
                     required
                     value={shipping.city}
-                    onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
+                    onChange={(e) =>
+                      setShipping((s) => ({ ...s, city: e.target.value }))
+                    }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
                 </div>
@@ -368,7 +386,9 @@ export default function CheckoutPage() {
                   <input
                     required
                     value={shipping.state}
-                    onChange={(e) => setShipping((s) => ({ ...s, state: e.target.value }))}
+                    onChange={(e) =>
+                      setShipping((s) => ({ ...s, state: e.target.value }))
+                    }
                     className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
                   />
                 </div>
@@ -414,7 +434,9 @@ export default function CheckoutPage() {
                 {t("checkout.paymentMethod")}
               </h2>
               <fieldset className="mt-4 space-y-3">
-                <legend className="sr-only">{t("checkout.paymentMethodSr")}</legend>
+                <legend className="sr-only">
+                  {t("checkout.paymentMethodSr")}
+                </legend>
                 {PAYMENT_OPTIONS.map((opt) => (
                   <label
                     key={opt.id}
@@ -445,8 +467,22 @@ export default function CheckoutPage() {
               </fieldset>
             </section>
 
+            <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
+              <h2 className="font-display text-lg font-semibold text-stone-900">
+                {t("checkout.promoCode")}
+              </h2>
+              <input
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
+              />
+            </section>
+
             {formError ? (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800" role="alert">
+              <p
+                className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
+                role="alert"
+              >
                 {formError}
               </p>
             ) : null}
@@ -455,13 +491,13 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={
-                  submitting ||
-                  cartLines.length === 0 ||
-                  cartStatus !== "cart"
+                  submitting || cartLines.length === 0 || cartStatus !== "cart"
                 }
                 className="rounded-lg bg-amber-800 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-amber-900 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {submitting ? t("checkout.submitting") : t("checkout.placeOrder")}
+                {submitting
+                  ? t("checkout.submitting")
+                  : t("checkout.placeOrder")}
               </button>
               <Link
                 href="/"

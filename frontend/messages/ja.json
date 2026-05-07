@@ -160,7 +160,8 @@
         "label": "BPAY",
         "description": "オンラインバンキングでBillerコードと参照番号を使用（BPAY View対応は金融機関によります）。"
       }
-    }
+    },
+    "promoCode": "クーポンコード"
   },
   "payDetail": {
     "amountDue": "お支払い金額",

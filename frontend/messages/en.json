@@ -160,7 +160,8 @@
         "label": "BPAY",
         "description": "Pay from online banking using our biller code and your reference (BPAY View compatible where available)."
       }
-    }
+    },
+    "promoCode": "Promo code"
   },
   "payDetail": {
     "amountDue": "Amount due",

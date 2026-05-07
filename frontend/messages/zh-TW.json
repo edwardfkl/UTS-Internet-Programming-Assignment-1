@@ -160,7 +160,8 @@
         "label": "BPAY",
         "description": "於網路銀行使用 Biller 代碼與參考編號付款（若銀行支援 BPAY View）。"
       }
-    }
+    },
+    "promoCode": "優惠碼"
   },
   "payDetail": {
     "amountDue": "應付金額",
