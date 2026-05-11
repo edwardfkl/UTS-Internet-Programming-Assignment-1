@@ -18,7 +18,7 @@ class OrderController extends Controller
         $q = AdminListRequest::search($request);
         $rawStatus = $request->query('status');
         $statusFilter = null;
-        if (is_string($rawStatus) && $rawStatus !== '' && in_array($rawStatus, [Order::STATUS_CART, Order::STATUS_PENDING_PAYMENT], true)) {
+        if (is_string($rawStatus) && $rawStatus !== '' && in_array($rawStatus, Order::EDITABLE_STATUSES, true)) {
             $statusFilter = $rawStatus;
         }
 
@@ -59,7 +59,14 @@ class OrderController extends Controller
 
         $orders = $query->paginate(25)->withQueryString();
 
-        return view('admin.orders.index', compact('orders', 'sort', 'dir', 'q', 'statusFilter'));
+        return view('admin.orders.index', [
+            'orders' => $orders,
+            'sort' => $sort,
+            'dir' => $dir,
+            'q' => $q,
+            'statusFilter' => $statusFilter,
+            'statuses' => Order::EDITABLE_STATUSES,
+        ]);
     }
 
     public function show(Order $order): View
@@ -71,6 +78,7 @@ class OrderController extends Controller
         return view('admin.orders.show', [
             'order' => $order,
             'lineTotal' => $lineTotal,
+            'statuses' => Order::EDITABLE_STATUSES,
         ]);
     }
 
@@ -79,7 +87,11 @@ class OrderController extends Controller
         $order->load('user');
         $users = User::query()->orderBy('email')->get(['id', 'name', 'email']);
 
-        return view('admin.orders.edit', compact('order', 'users'));
+        return view('admin.orders.edit', [
+            'order' => $order,
+            'users' => $users,
+            'statuses' => Order::EDITABLE_STATUSES,
+        ]);
     }
 
     public function update(Request $request, Order $order): RedirectResponse
@@ -92,7 +104,7 @@ class OrderController extends Controller
         }
 
         $data = $request->validate([
-            'status' => ['required', Rule::in([Order::STATUS_CART, Order::STATUS_PENDING_PAYMENT])],
+            'status' => ['required', Rule::in(Order::EDITABLE_STATUSES)],
             'payment_method' => ['nullable', Rule::in(['atm_transfer', 'pay_id', 'bpay'])],
             'placed_at' => ['nullable', 'date'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
@@ -125,8 +137,51 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.show', $order)->with('success', 'Order updated.');
     }
 
-    // Dont know how to continue
-    public function userOrders(Request $request) {
-        return $request->user()->orders()->latest()->get();
+    public function destroy(Order $order): RedirectResponse
+    {
+        $order->items()->delete();
+        $order->delete();
+
+        return redirect()->route('admin.orders.index')->with('success', 'Order deleted.');
+    }
+
+    /**
+     * Bulk delete or status update for the orders list.
+     */
+    public function bulk(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'action' => ['required', Rule::in(['delete', 'set_status'])],
+            'status' => ['required_if:action,set_status', Rule::in(Order::EDITABLE_STATUSES)],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:orders,id'],
+        ]);
+
+        $ids = array_values(array_unique(array_map('intval', $data['ids'])));
+        $orders = Order::query()->whereIn('id', $ids)->get();
+        $applied = 0;
+
+        if ($data['action'] === 'delete') {
+            foreach ($orders as $order) {
+                $order->items()->delete();
+                $order->delete();
+                $applied++;
+            }
+
+            return redirect()
+                ->route('admin.orders.index', $request->only(['q', 'status', 'sort', 'dir', 'page']))
+                ->with('success', __('admin.orders.bulk.deleted', ['count' => $applied]));
+        }
+
+        $status = $data['status'];
+        foreach ($orders as $order) {
+            $order->status = $status;
+            $order->save();
+            $applied++;
+        }
+
+        return redirect()
+            ->route('admin.orders.index', $request->only(['q', 'status', 'sort', 'dir', 'page']))
+            ->with('success', __('admin.orders.bulk.status_updated', ['count' => $applied, 'status' => $status]));
     }
 }

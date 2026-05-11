@@ -50,11 +50,7 @@
     "checkoutCompleteHint": "このトークンは入金待ちの注文に紐づいています。商品を追加するには新しいカートを開始してください。",
     "startNewCart": "新しいカート",
     "emptyDefault": "カートは空です。カタログから商品を追加するか、商品ページを開いてください。",
-    "emptyProduct": "カートは空です。この商品を追加するか、カタログを参照してください。",
-    "savedOnServer": "サーバーに保存済み",
-    "savedOnServerHint": "明細はデータベースに保存されています。このブラウザには注文トークンのみ保存されます。リンクをコピーして他の端末やサイトデータ削除後に同じカートを開けます。",
-    "copyCartLink": "カートのリンクをコピー",
-    "copied": "コピーしました"
+    "emptyProduct": "カートは空です。この商品を追加するか、カタログを参照してください。"
   },
   "home": {
     "catalogueSr": "商品カタログ",
@@ -71,7 +67,21 @@
     "backToCatalogue": "カタログに戻る",
     "notFoundHint": "この商品は削除されたか、リンクが無効です。",
     "detailQtySr": "数量",
-    "reviewCount": "{count}件のレビュー"
+    "reviewCount": "{count}件のレビュー",
+    "reviewsTitle": "レビュー",
+    "noReviewsYet": "まだレビューはありません。",
+    "averageOfCount": "平均 {average}（{count} 件）",
+    "leaveAReview": "レビューを書く",
+    "updateYourReview": "レビューを更新",
+    "submitReview": "送信",
+    "updateReview": "更新する",
+    "submittingReview": "送信中…",
+    "commentLabel": "コメント（任意）",
+    "commentPlaceholder": "ご意見をお聞かせください",
+    "reviewSaved": "レビューを保存しました。",
+    "loginToReviewPrompt": "ログインしてレビューを投稿してください。",
+    "anonymousReviewer": "匿名ユーザー",
+    "starsAria": "{count} 星で評価"
   },
   "login": {
     "title": "ログイン",
@@ -93,6 +103,7 @@
     "title": "アカウント",
     "signedInAs": "ログイン中",
     "intro": "連絡先とデフォルトの配送先を更新できます。チェックアウトで自動入力されます。",
+    "viewOrderHistory": "注文履歴を見る →",
     "changePassword": "パスワード変更",
     "changePasswordHint": "現在のパスワードを入力し、新しいパスワード（8文字以上）を設定してください。",
     "currentPassword": "現在のパスワード",
@@ -124,6 +135,8 @@
     "signedInDelivery": "{email} でサインイン中です。お届け先の入力が必要です。",
     "editProfileLink": "保存されたプロフィールと住所を編集",
     "orderSummary": "注文概要",
+    "subtotal": "小計",
+    "discount": "割引",
     "deliveryAddress": "お届け先",
     "recipientName": "受取人名",
     "addressLine1": "住所1行目",
@@ -162,7 +175,41 @@
         "description": "オンラインバンキングでBillerコードと参照番号を使用（BPAY View対応は金融機関によります）。"
       }
     },
-    "promoCode": "クーポンコード"
+    "promoCode": "クーポンコード",
+    "promo": {
+      "placeholder": "コードを入力（例：WELCOME10）",
+      "hint": "WELCOME10 で HK$10 オフ、SAVE20 で HK$20 オフです。",
+      "apply": "適用",
+      "applying": "確認中…",
+      "applied": "適用済み",
+      "remove": "削除",
+      "invalid": "クーポンコードが無効か期限切れです。"
+    }
+  },
+  "accountOrders": {
+    "tagline": "注文履歴",
+    "title": "注文履歴",
+    "intro": "ご注文の状況がここに表示されます。管理者の処理に応じてステータスが更新されます。",
+    "backToAccount": "← アカウントへ戻る",
+    "empty": "まだご注文はありません。",
+    "startShopping": "ショッピングを始める →",
+    "itemCount": "{count} 点",
+    "col": {
+      "reference": "注文番号",
+      "placed": "注文日時",
+      "items": "点数",
+      "payment": "お支払い",
+      "total": "合計",
+      "status": "ステータス"
+    },
+    "status": {
+      "cart": "カート",
+      "pending_payment": "支払い待ち",
+      "paid": "支払い済み",
+      "shipped": "発送済み",
+      "completed": "完了",
+      "cancelled": "キャンセル済み"
+    }
   },
   "payDetail": {
     "amountDue": "お支払い金額",
@@ -190,6 +237,7 @@
   "avatar": {
     "openMenu": "ユーザーメニューを開く（{name}）",
     "myAccount": "マイアカウント",
+    "orderHistory": "注文履歴",
     "changePassword": "パスワード変更",
     "adminPanel": "管理画面",
     "logOut": "ログアウト"

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Support\PromoCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -19,6 +20,7 @@ class CheckoutController extends Controller
 
         $data = $request->validate([
             'payment_method' => ['required', 'string', 'in:atm_transfer,pay_id,bpay'],
+            'promo_code' => ['nullable', 'string', 'max:32'],
             'shipping_recipient_name' => ['required', 'string', 'max:255'],
             'shipping_phone' => ['required', 'string', 'max:64'],
             'shipping_line1' => ['required', 'string', 'max:255'],
@@ -60,8 +62,45 @@ class CheckoutController extends Controller
             ]);
         }
 
+        $order->load('items.product:id,name,price,status');
+
+        $unavailable = $order->items
+            ->filter(fn ($item) => $item->product === null || $item->product->status !== \App\Models\Product::STATUS_ACTIVE)
+            ->map(fn ($item) => $item->product?->name ?? '#'.$item->product_id)
+            ->values();
+        if ($unavailable->isNotEmpty()) {
+            throw ValidationException::withMessages([
+                'order' => ['Some items are no longer available: '.$unavailable->implode(', ')],
+            ]);
+        }
+
+        $subtotal = round(
+            $order->items->sum(fn ($item) => (float) $item->unit_price * (int) $item->quantity),
+            2,
+        );
+
+        $promoInput = $data['promo_code'] ?? null;
+        $promoNormalised = PromoCode::normalise($promoInput);
+        $discount = 0.0;
+
+        if ($promoNormalised !== null) {
+            $maybeDiscount = PromoCode::discountFor($promoNormalised, $subtotal);
+            if ($maybeDiscount === null) {
+                throw ValidationException::withMessages([
+                    'promo_code' => ['Invalid or expired promo code.'],
+                ]);
+            }
+            $discount = $maybeDiscount;
+        }
+
+        $total = round(max($subtotal - $discount, 0), 2);
+
         $order->status = Order::STATUS_PENDING_PAYMENT;
         $order->payment_method = $data['payment_method'];
+        $order->promo_code = $promoNormalised;
+        $order->discount_amount = $discount;
+        $order->subtotal_amount = $subtotal;
+        $order->total_amount = $total;
         $order->placed_at = now();
         $order->shipping_recipient_name = $data['shipping_recipient_name'];
         $order->shipping_phone = $data['shipping_phone'];
@@ -87,7 +126,6 @@ class CheckoutController extends Controller
             $user->save();
         }
 
-        $order->load('items.product:id,name,price');
         $lines = $order->items->map(function ($item) {
             $unit = (float) $item->unit_price;
 
@@ -97,7 +135,6 @@ class CheckoutController extends Controller
                 'line_total' => round($unit * $item->quantity, 2),
             ];
         });
-        $total = round($lines->sum('line_total'), 2);
 
         return response()->json([
             'order_reference' => 'SSP-'.str_pad((string) $order->id, 6, '0', STR_PAD_LEFT),
@@ -105,7 +142,11 @@ class CheckoutController extends Controller
             'status' => $order->status,
             'payment_method' => $order->payment_method,
             'placed_at' => $order->placed_at?->toIso8601String(),
-            'total' => $total,
+            'promo_code' => $order->promo_code,
+            'discount_amount' => (float) $order->discount_amount,
+            'subtotal_amount' => (float) $order->subtotal_amount,
+            'total_amount' => (float) $order->total_amount,
+            'total' => (float) $order->total_amount,
             'lines' => $lines,
             'shipping' => [
                 'recipient_name' => $order->shipping_recipient_name,

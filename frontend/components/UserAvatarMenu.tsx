@@ -114,6 +114,14 @@ export function UserAvatarMenu({ user, onLogout }: UserAvatarMenuProps) {
             {t("avatar.myAccount")}
           </Link>
           <Link
+            href="/account/orders"
+            role="menuitem"
+            className="block px-4 py-2.5 text-sm text-stone-800 hover:bg-stone-50"
+            onClick={close}
+          >
+            {t("avatar.orderHistory")}
+          </Link>
+          <Link
             href="/account#change-password"
             role="menuitem"
             className="block px-4 py-2.5 text-sm text-stone-800 hover:bg-stone-50"

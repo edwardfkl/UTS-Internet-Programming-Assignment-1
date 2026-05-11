@@ -30,6 +30,7 @@ class AdminGuardrailsTest extends TestCase
         $response = $this->actingAs($admin)->put(route('admin.users.update', $admin), [
             'name' => 'Sole Admin',
             'email' => 'sole@example.com',
+            'status' => User::STATUS_ACTIVE,
             'avatar_url' => null,
             'phone' => null,
             'shipping_recipient_name' => null,

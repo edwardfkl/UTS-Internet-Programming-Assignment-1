@@ -24,6 +24,13 @@ class AuthenticateJwt
             ], 401);
         }
 
+        if (! $user->isActive()) {
+            return new JsonResponse([
+                'message' => 'Account is not active.',
+                'status' => $user->status,
+            ], 403);
+        }
+
         Auth::setUser($user);
         $request->setUserResolver(static fn () => $user);
 

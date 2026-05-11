@@ -14,12 +14,21 @@ return [
         'clear' => 'クリア',
     ],
 
+    'bulk' => [
+        'selected' => '件選択中',
+        'set_status' => 'ステータスを変更',
+        'apply_status' => 'ステータスを適用',
+        'delete_selected' => '選択を削除',
+        'confirm_delete' => '選択した項目を削除しますか？元に戻せません。',
+    ],
+
     'nav' => [
         'brand' => '管理画面',
         'dashboard' => 'ダッシュボード',
         'users' => 'ユーザー',
         'products' => '商品',
         'orders' => '注文',
+        'promo_codes' => 'クーポン',
         'logout' => 'ログアウト',
     ],
 
@@ -60,6 +69,7 @@ return [
         'col_id' => 'ID',
         'col_name' => '名前',
         'col_email' => 'メール',
+        'col_status' => 'ステータス',
         'col_admin' => '管理者',
         'col_created' => '作成日時',
         'col_updated' => '更新日時',
@@ -68,6 +78,20 @@ return [
         'empty' => 'ユーザーはまだありません。',
         'edit_link' => '編集',
         'search_placeholder' => '名前またはメールで検索…',
+        'filter_status' => 'ステータス',
+        'filter_status_all' => 'すべて',
+
+        'status_labels' => [
+            'active' => '有効',
+            'suspended' => '停止中',
+            'banned' => 'BAN',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count 件のユーザーを削除しました。',
+            'status_updated' => ':count 件のユーザーを「:status」に変更しました。',
+            'skipped' => 'スキップ：:list。',
+        ],
 
         'edit' => [
             'meta_title' => 'ユーザーを編集',
@@ -78,6 +102,8 @@ return [
             'avatar_url' => 'アバター画像URL',
             'avatar_placeholder' => 'https://…',
             'admin_access' => '管理者アクセス',
+            'status' => 'アカウントステータス',
+            'status_hint' => '「停止中」「BAN」のアカウントはログインできません。',
             'phone' => '電話',
             'shipping_legend' => '既定の配送先（ユーザーに保存）',
             'recipient' => '受取人名',
@@ -101,6 +127,7 @@ return [
         'add' => '商品を追加',
         'col_id' => 'ID',
         'col_name' => '名前',
+        'col_status' => 'ステータス',
         'col_price' => '価格',
         'col_stock' => '在庫',
         'col_created' => '作成日時',
@@ -109,6 +136,20 @@ return [
         'empty' => '商品がありません。追加するかシーダーを実行してください。',
         'edit_link' => '編集',
         'search_placeholder' => '名前または説明で検索…',
+        'filter_status' => 'ステータス',
+        'filter_status_all' => 'すべて',
+
+        'status_labels' => [
+            'active' => '掲載中',
+            'inactive' => '掲載停止',
+            'draft' => '下書き',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count 件の商品を削除しました。',
+            'status_updated' => ':count 件の商品を「:status」に変更しました。',
+            'skipped' => 'スキップ：:list。',
+        ],
 
         'form' => [
             'name' => '名前',
@@ -117,6 +158,8 @@ return [
             'stock' => '在庫',
             'image_url' => '画像URL',
             'url_placeholder' => 'https://…',
+            'status' => '掲載ステータス',
+            'status_hint' => '「掲載中」のみフロントエンドに表示されます。「下書き」は管理者のみ閲覧可。',
         ],
 
         'create' => [
@@ -160,6 +203,15 @@ return [
         'status_labels' => [
             'cart' => 'カート（未確定）',
             'pending_payment' => '支払い待ち',
+            'paid' => '支払い済み',
+            'shipped' => '発送済み',
+            'completed' => '完了',
+            'cancelled' => 'キャンセル済み',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count 件の注文を削除しました。',
+            'status_updated' => ':count 件の注文を「:status」に変更しました。',
         ],
 
         'show' => [
@@ -172,6 +224,8 @@ return [
             'user' => 'ユーザー',
             'payment_method' => '支払い方法',
             'placed_at' => '注文日時',
+            'promo_code' => 'クーポンコード',
+            'total' => '小計 − 割引 = 合計',
             'shipping' => '配送',
             'line_items' => '明細行',
             'col_product' => '商品',
@@ -190,6 +244,7 @@ return [
             'all_orders' => 'すべての注文',
             'token_note' => 'トークンは参照のみ（変更できません）：',
             'status' => 'ステータス',
+            'status_flow_hint' => '一般的なフロー：支払い待ち → 支払い済み → 発送済み → 完了。',
             'payment_method' => '支払い方法',
             'placed_at' => '注文日時',
             'linked_user' => '関連ユーザー',
@@ -218,6 +273,71 @@ return [
             'unit_price' => '単価',
             'delete_confirm' => 'この明細を注文から削除しますか？',
             'delete' => '明細を削除',
+        ],
+    ],
+
+    'promo_codes' => [
+        'title' => 'クーポン',
+        'heading' => 'クーポン',
+        'intro' => 'チェックアウト時に顧客が利用できる割引コード。',
+        'add' => 'クーポンを追加',
+        'col_id' => 'ID',
+        'col_code' => 'コード',
+        'col_label' => 'ラベル',
+        'col_type' => 'タイプ',
+        'col_amount' => '金額',
+        'col_window' => '有効期間',
+        'col_status' => 'ステータス',
+        'col_actions' => '操作',
+        'empty' => 'クーポンはまだありません。',
+        'edit_link' => '編集',
+        'search_placeholder' => 'コードまたはラベルで検索…',
+        'filter_status' => 'ステータス',
+        'filter_status_all' => 'すべて',
+        'always' => '常時有効',
+        'min_short' => '最低 :amount',
+
+        'status_labels' => [
+            'active' => '有効',
+            'inactive' => '無効',
+        ],
+
+        'type_labels' => [
+            'fixed' => '固定金額',
+            'percent' => 'パーセント',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count 件のクーポンを削除しました。',
+            'status_updated' => ':count 件のクーポンを「:status」に変更しました。',
+        ],
+
+        'form' => [
+            'code' => 'コード',
+            'code_hint' => '英大文字・数字・ハイフン・アンダースコアのみ。',
+            'label' => '表示ラベル（任意）',
+            'type' => '割引タイプ',
+            'amount' => '金額',
+            'amount_hint' => '「固定金額」は整数（例 10 = HK$10）。「パーセント」はパーセント値（例 15 = 15%）。',
+            'min_subtotal' => '最低小計（任意）',
+            'min_subtotal_hint' => 'カートの小計がこの金額に達した時のみ適用されます。',
+            'starts_at' => '開始日時（任意）',
+            'ends_at' => '終了日時（任意）',
+            'is_active' => '有効（顧客が使用可能）',
+        ],
+
+        'create' => [
+            'meta_title' => '新規クーポン',
+            'heading' => '新規クーポン',
+            'back' => '← クーポン一覧へ',
+        ],
+
+        'edit' => [
+            'meta_title' => 'クーポンを編集',
+            'heading' => '編集：:code',
+            'back' => '← クーポン一覧へ',
+            'delete_confirm' => 'このクーポンを削除しますか？顧客は今後利用できなくなります。',
+            'delete' => 'クーポンを削除',
         ],
     ],
 ];

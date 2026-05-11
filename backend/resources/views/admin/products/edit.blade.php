@@ -12,7 +12,7 @@
     <form method="post" action="{{ route('admin.products.update', $product) }}" class="mt-8 max-w-xl">
         @csrf
         @method('put')
-        @include('admin.products._form', ['product' => $product])
+        @include('admin.products._form', ['product' => $product, 'statuses' => $statuses])
         <div class="mt-6 flex flex-wrap gap-3">
             <button type="submit" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">
                 {{ __('admin.common.save') }}

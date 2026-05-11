@@ -16,6 +16,7 @@
                     <a href="{{ route('admin.users.index') }}" class="text-zinc-600 hover:text-zinc-900 @if(request()->routeIs('admin.users.*')) font-medium text-zinc-900 @endif">{{ __('admin.nav.users') }}</a>
                     <a href="{{ route('admin.products.index') }}" class="text-zinc-600 hover:text-zinc-900 @if(request()->routeIs('admin.products.*')) font-medium text-zinc-900 @endif">{{ __('admin.nav.products') }}</a>
                     <a href="{{ route('admin.orders.index') }}" class="text-zinc-600 hover:text-zinc-900 @if(request()->routeIs('admin.orders.*')) font-medium text-zinc-900 @endif">{{ __('admin.nav.orders') }}</a>
+                    <a href="{{ route('admin.promo-codes.index') }}" class="text-zinc-600 hover:text-zinc-900 @if(request()->routeIs('admin.promo-codes.*')) font-medium text-zinc-900 @endif">{{ __('admin.nav.promo_codes') }}</a>
                 </nav>
             </div>
             <div class="flex items-center gap-3">

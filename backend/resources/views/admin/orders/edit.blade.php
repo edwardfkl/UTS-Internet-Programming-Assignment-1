@@ -20,9 +20,13 @@
                 <label for="status" class="block text-sm font-medium text-zinc-700">{{ __('admin.orders.edit.status') }}</label>
                 <select id="status" name="status" required
                         class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
-                    <option value="cart" @selected(old('status', $order->status) === 'cart')>{{ __('admin.orders.status_labels.cart') }}</option>
-                    <option value="pending_payment" @selected(old('status', $order->status) === 'pending_payment')>{{ __('admin.orders.status_labels.pending_payment') }}</option>
+                    @foreach ($statuses as $statusOption)
+                        <option value="{{ $statusOption }}" @selected(old('status', $order->status) === $statusOption)>
+                            {{ \Illuminate\Support\Facades\Lang::has('admin.orders.status_labels.'.$statusOption) ? __('admin.orders.status_labels.'.$statusOption) : $statusOption }}
+                        </option>
+                    @endforeach
                 </select>
+                <p class="mt-1 text-xs text-zinc-500">{{ __('admin.orders.edit.status_flow_hint') }}</p>
             </div>
             <div>
                 <label for="payment_method" class="block text-sm font-medium text-zinc-700">{{ __('admin.orders.edit.payment_method') }}</label>

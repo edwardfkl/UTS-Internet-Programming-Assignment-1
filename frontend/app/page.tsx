@@ -30,7 +30,6 @@ export default function Home() {
     handleAdd,
     handleQtyChange,
     handleRemove,
-    cartToken,
     cartStatus,
     startNewCart,
   } = useCart();
@@ -201,7 +200,6 @@ export default function Home() {
           loading={cartLoading}
           error={cartError}
           busyId={busyId}
-          cartToken={cartToken}
           cartStatus={cartStatus}
           onStartNewCart={() => void startNewCart()}
           onQtyChange={(line, q) => void handleQtyChange(line, q)}

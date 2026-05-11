@@ -11,7 +11,7 @@
 
     <form method="post" action="{{ route('admin.products.store') }}" class="mt-8 max-w-xl">
         @csrf
-        @include('admin.products._form', ['product' => null])
+        @include('admin.products._form', ['product' => null, 'statuses' => $statuses])
         <div class="mt-6">
             <button type="submit" class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">
                 {{ __('admin.common.create') }}

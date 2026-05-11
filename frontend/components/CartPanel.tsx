@@ -2,10 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLocale } from "@/contexts/locale-context";
-import { CART_URL_QUERY } from "@/lib/api";
 import { money, parsePrice } from "@/lib/money";
 import type { CartLine } from "@/lib/types";
 
@@ -16,7 +14,6 @@ type CartPanelProps = {
   error: string | null;
   busyId: number | null;
   emptyHintKey?: "default" | "product";
-  cartToken: string | null;
   cartStatus: string;
   onStartNewCart: () => void;
   onQtyChange: (line: CartLine, nextQty: number) => void;
@@ -30,7 +27,6 @@ export function CartPanel({
   error,
   busyId,
   emptyHintKey = "default",
-  cartToken,
   cartStatus,
   onStartNewCart,
   onQtyChange,
@@ -38,26 +34,12 @@ export function CartPanel({
 }: CartPanelProps) {
   const { t } = useLocale();
   const { user, ready: authReady } = useAuth();
-  const [copied, setCopied] = useState(false);
   const cartEditable = cartStatus === "cart";
   const needsLogin = authReady && !user;
   const checkoutHref = needsLogin ? "/login?redirect=%2Fcheckout" : "/checkout";
   const checkoutLabel = needsLogin ? t("cart.loginToCheckout") : t("cart.checkout");
   const emptyHint =
     emptyHintKey === "product" ? t("cart.emptyProduct") : t("cart.emptyDefault");
-
-  async function copySaveLink(): Promise<void> {
-    if (!cartToken || typeof window === "undefined") return;
-    const url = new URL(window.location.origin + window.location.pathname);
-    url.searchParams.set(CART_URL_QUERY, cartToken);
-    try {
-      await navigator.clipboard.writeText(url.toString());
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* clipboard denied */
-    }
-  }
 
   return (
     <aside
@@ -194,21 +176,6 @@ export function CartPanel({
           >
             {checkoutLabel}
           </Link>
-        ) : null}
-        {!loading && cartToken && cartEditable ? (
-          <div className="mt-4 rounded-xl border border-amber-100 bg-amber-50/80 p-3">
-            <p className="text-xs font-medium text-amber-950">{t("cart.savedOnServer")}</p>
-            <p className="mt-1 text-xs text-stone-600">
-              {t("cart.savedOnServerHint")}
-            </p>
-            <button
-              type="button"
-              onClick={() => void copySaveLink()}
-              className="mt-2 rounded-lg border border-amber-800/30 bg-white px-3 py-1.5 text-xs font-medium text-amber-950 shadow-sm hover:bg-amber-50"
-            >
-              {copied ? t("cart.copied") : t("cart.copyCartLink")}
-            </button>
-          </div>
         ) : null}
       </div>
     </aside>

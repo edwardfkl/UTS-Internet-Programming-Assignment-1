@@ -76,6 +76,11 @@ class CartController extends Controller
         ]);
 
         $product = Product::query()->findOrFail($data['product_id']);
+        if (! $product->isActive()) {
+            throw ValidationException::withMessages([
+                'product_id' => ['This product is not available for purchase.'],
+            ]);
+        }
         if ($product->stock < $data['quantity']) {
             throw ValidationException::withMessages([
                 'quantity' => ['Not enough stock for this product.'],
@@ -124,6 +129,11 @@ class CartController extends Controller
             ->with(['product'])
             ->firstOrFail();
 
+        if (! $item->product->isActive()) {
+            throw ValidationException::withMessages([
+                'product_id' => ['This product is no longer available.'],
+            ]);
+        }
         if ($item->product->stock < $data['quantity']) {
             throw ValidationException::withMessages([
                 'quantity' => ['Not enough stock for this product.'],

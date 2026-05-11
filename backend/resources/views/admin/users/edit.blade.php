@@ -35,6 +35,18 @@
             <label for="is_admin" class="text-sm font-medium text-zinc-700">{{ __('admin.users.edit.admin_access') }}</label>
         </div>
         <div>
+            <label for="status" class="block text-sm font-medium text-zinc-700">{{ __('admin.users.edit.status') }}</label>
+            <select id="status" name="status" required
+                    class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
+                @foreach ($statuses as $statusOption)
+                    <option value="{{ $statusOption }}" @selected(old('status', $user->status) === $statusOption)>
+                        {{ __('admin.users.status_labels.'.$statusOption) }}
+                    </option>
+                @endforeach
+            </select>
+            <p class="mt-1 text-xs text-zinc-500">{{ __('admin.users.edit.status_hint') }}</p>
+        </div>
+        <div>
             <label for="phone" class="block text-sm font-medium text-zinc-700">{{ __('admin.users.edit.phone') }}</label>
             <input id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}"
                    class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">

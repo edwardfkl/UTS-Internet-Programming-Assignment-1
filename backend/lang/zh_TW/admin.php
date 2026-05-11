@@ -14,12 +14,21 @@ return [
         'clear' => '清除',
     ],
 
+    'bulk' => [
+        'selected' => '個項目已選',
+        'set_status' => '改狀態為',
+        'apply_status' => '套用狀態',
+        'delete_selected' => '刪除已選',
+        'confirm_delete' => '確定刪除已選嘅項目？此操作無法還原。',
+    ],
+
     'nav' => [
         'brand' => '管理後台',
         'dashboard' => '儀表板',
         'users' => '用戶',
         'products' => '商品',
         'orders' => '訂單',
+        'promo_codes' => '優惠碼',
         'logout' => '登出',
     ],
 
@@ -60,6 +69,7 @@ return [
         'col_id' => '編號',
         'col_name' => '姓名',
         'col_email' => '電郵',
+        'col_status' => '狀態',
         'col_admin' => '管理員',
         'col_created' => '建立時間',
         'col_updated' => '最後修改',
@@ -68,6 +78,20 @@ return [
         'empty' => '暫時未有用戶。',
         'edit_link' => '編輯',
         'search_placeholder' => '搜尋姓名或電郵…',
+        'filter_status' => '狀態',
+        'filter_status_all' => '全部',
+
+        'status_labels' => [
+            'active' => '啟用',
+            'suspended' => '已停權',
+            'banned' => '已封禁',
+        ],
+
+        'bulk' => [
+            'deleted' => '已刪除 :count 個用戶。',
+            'status_updated' => '已將 :count 個用戶狀態改為「:status」。',
+            'skipped' => '已略過：:list。',
+        ],
 
         'edit' => [
             'meta_title' => '編輯用戶',
@@ -78,6 +102,8 @@ return [
             'avatar_url' => '頭像圖片網址',
             'avatar_placeholder' => 'https://…',
             'admin_access' => '管理員權限',
+            'status' => '帳戶狀態',
+            'status_hint' => '「已停權」同「已封禁」嘅帳戶無法登入。',
             'phone' => '電話',
             'shipping_legend' => '預設收件地址（儲喺用戶度）',
             'recipient' => '收件人姓名',
@@ -101,6 +127,7 @@ return [
         'add' => '新增商品',
         'col_id' => '編號',
         'col_name' => '名稱',
+        'col_status' => '狀態',
         'col_price' => '價格',
         'col_stock' => '庫存',
         'col_created' => '建立時間',
@@ -109,6 +136,20 @@ return [
         'empty' => '未有商品。請新增或執行 seeder。',
         'edit_link' => '編輯',
         'search_placeholder' => '搜尋名稱或描述…',
+        'filter_status' => '狀態',
+        'filter_status_all' => '全部',
+
+        'status_labels' => [
+            'active' => '上架',
+            'inactive' => '下架',
+            'draft' => '暫存',
+        ],
+
+        'bulk' => [
+            'deleted' => '已刪除 :count 件商品。',
+            'status_updated' => '已將 :count 件商品狀態改為「:status」。',
+            'skipped' => '已略過：:list。',
+        ],
 
         'form' => [
             'name' => '名稱',
@@ -117,6 +158,8 @@ return [
             'stock' => '庫存',
             'image_url' => '圖片網址',
             'url_placeholder' => 'https://…',
+            'status' => '上架狀態',
+            'status_hint' => '只有「上架」嘅商品會喺前台顯示；「暫存」只係後台可見。',
         ],
 
         'create' => [
@@ -160,6 +203,15 @@ return [
         'status_labels' => [
             'cart' => '暫存',
             'pending_payment' => '待付款',
+            'paid' => '已付款',
+            'shipped' => '已寄出',
+            'completed' => '已完成',
+            'cancelled' => '已取消',
+        ],
+
+        'bulk' => [
+            'deleted' => '已刪除 :count 張訂單。',
+            'status_updated' => '已將 :count 張訂單狀態改為「:status」。',
         ],
 
         'show' => [
@@ -172,6 +224,8 @@ return [
             'user' => '用戶',
             'payment_method' => '付款方式',
             'placed_at' => '落單時間',
+            'promo_code' => '優惠碼',
+            'total' => '小計 − 折扣 = 應付',
             'shipping' => '運送',
             'line_items' => '訂單明細',
             'col_product' => '商品',
@@ -190,6 +244,7 @@ return [
             'all_orders' => '全部訂單',
             'token_note' => '令牌只供查閱，無法修改：',
             'status' => '狀態',
+            'status_flow_hint' => '典型流程：待付款 → 已付款 → 已寄出 → 已完成。',
             'payment_method' => '付款方式',
             'placed_at' => '落單時間',
             'linked_user' => '已連結用戶',
@@ -218,6 +273,71 @@ return [
             'unit_price' => '單價',
             'delete_confirm' => '由訂單移除呢一行？',
             'delete' => '刪除明細',
+        ],
+    ],
+
+    'promo_codes' => [
+        'title' => '優惠碼',
+        'heading' => '優惠碼',
+        'intro' => '結帳時可使用嘅折扣碼。',
+        'add' => '新增優惠碼',
+        'col_id' => '編號',
+        'col_code' => '碼',
+        'col_label' => '說明',
+        'col_type' => '類型',
+        'col_amount' => '金額',
+        'col_window' => '有效期',
+        'col_status' => '狀態',
+        'col_actions' => '操作',
+        'empty' => '暫時未有優惠碼。',
+        'edit_link' => '編輯',
+        'search_placeholder' => '搜尋優惠碼或說明…',
+        'filter_status' => '狀態',
+        'filter_status_all' => '全部',
+        'always' => '長期有效',
+        'min_short' => '最低 :amount',
+
+        'status_labels' => [
+            'active' => '啟用',
+            'inactive' => '停用',
+        ],
+
+        'type_labels' => [
+            'fixed' => '固定金額',
+            'percent' => '百分比',
+        ],
+
+        'bulk' => [
+            'deleted' => '已刪除 :count 個優惠碼。',
+            'status_updated' => '已將 :count 個優惠碼狀態改為「:status」。',
+        ],
+
+        'form' => [
+            'code' => '優惠碼',
+            'code_hint' => '只可用大寫字母、數字、橫線或底線。',
+            'label' => '顯示用標籤（選填）',
+            'type' => '折扣類型',
+            'amount' => '金額',
+            'amount_hint' => '「固定金額」入整數（例 10 = HK$10）；「百分比」入百分點（例 15 = 15%）。',
+            'min_subtotal' => '最低小計（選填）',
+            'min_subtotal_hint' => '小計達到此金額先可使用此碼。',
+            'starts_at' => '開始時間（選填）',
+            'ends_at' => '結束時間（選填）',
+            'is_active' => '啟用（顧客可使用此碼）',
+        ],
+
+        'create' => [
+            'meta_title' => '新增優惠碼',
+            'heading' => '新增優惠碼',
+            'back' => '← 返優惠碼列表',
+        ],
+
+        'edit' => [
+            'meta_title' => '編輯優惠碼',
+            'heading' => '編輯：:code',
+            'back' => '← 返優惠碼列表',
+            'delete_confirm' => '確定刪除此優惠碼？顧客將無法再使用。',
+            'delete' => '刪除優惠碼',
         ],
     ],
 ];

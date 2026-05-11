@@ -3,7 +3,12 @@ import type {
   CheckoutResult,
   PaymentMethod,
   Product,
+  ProductReview,
+  ProductReviewsResponse,
+  PromoPreview,
   ShippingForm,
+  UserOrderDetail,
+  UserOrderSummary,
 } from "./types";
 import { getAuthToken } from "./authToken";
 
@@ -13,24 +18,6 @@ function bearerHeaders(): Record<string, string> {
 }
 
 const CART_STORAGE_KEY = "studio_supply_cart_token";
-/** Use `/?cart=<order-token>` to restore a cart bookmarked on another browser. */
-export const CART_URL_QUERY = "cart";
-
-/** Laravel `Str::uuid()` (UUID v4) */
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-export function applyCartFromUrlIfPresent(): void {
-  if (typeof window === "undefined") return;
-  const params = new URLSearchParams(window.location.search);
-  const fromQuery = params.get(CART_URL_QUERY)?.trim();
-  if (!fromQuery || !UUID_RE.test(fromQuery)) return;
-  window.localStorage.setItem(CART_STORAGE_KEY, fromQuery);
-  params.delete(CART_URL_QUERY);
-  const search = params.toString();
-  const next = `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`;
-  window.history.replaceState({}, "", next);
-}
 
 export function apiBase(): string {
   return process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
@@ -75,7 +62,6 @@ export async function createCartSession(): Promise<string> {
 }
 
 export async function ensureCartToken(): Promise<string> {
-  applyCartFromUrlIfPresent();
   const existing = getStoredCartToken();
   if (existing) return existing;
   return createCartSession();
@@ -138,6 +124,7 @@ export async function placeOrder(
   paymentMethod: PaymentMethod,
   shipping: ShippingForm,
   saveToProfile: boolean,
+  promoCode?: string | null,
 ): Promise<CheckoutResult> {
   const res = await fetch(`${apiBase()}/api/checkout`, {
     method: "POST",
@@ -149,6 +136,7 @@ export async function placeOrder(
     },
     body: JSON.stringify({
       payment_method: paymentMethod,
+      promo_code: promoCode?.trim() ? promoCode.trim() : null,
       shipping_recipient_name: shipping.recipient_name,
       shipping_phone: shipping.phone,
       shipping_line1: shipping.line1,
@@ -167,7 +155,8 @@ export async function placeOrder(
         message?: string;
         errors?: Record<string, string[]>;
       };
-      if (body.errors?.order?.[0]) msg = body.errors.order[0];
+      if (body.errors?.promo_code?.[0]) msg = body.errors.promo_code[0];
+      else if (body.errors?.order?.[0]) msg = body.errors.order[0];
       else if (body.message) msg = body.message;
     } catch {
       /* ignore */
@@ -246,8 +235,98 @@ export async function deleteCartItem(token: string, cartItemId: number): Promise
   }
 }
 
-export async function fetchUserOrders() {
-  const response = await fetch(`${apiBase()}/api/orders`);
-  if (!response.ok) throw new Error("Failed to fetch orders");
-  return response.json();
+export async function fetchUserOrders(): Promise<UserOrderSummary[]> {
+  const res = await fetch(`${apiBase()}/api/orders`, {
+    headers: { Accept: "application/json", ...bearerHeaders() },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Could not load orders (HTTP ${res.status})`);
+  }
+  const body = (await res.json()) as { data: UserOrderSummary[] };
+  return body.data;
+}
+
+export async function fetchUserOrder(id: number): Promise<UserOrderDetail> {
+  const res = await fetch(`${apiBase()}/api/orders/${id}`, {
+    headers: { Accept: "application/json", ...bearerHeaders() },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Could not load order (HTTP ${res.status})`);
+  }
+  return res.json() as Promise<UserOrderDetail>;
+}
+
+export async function fetchProductReviews(
+  productId: number,
+): Promise<ProductReviewsResponse> {
+  const res = await fetch(`${apiBase()}/api/products/${productId}/reviews`, {
+    headers: { Accept: "application/json" },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Could not load reviews (HTTP ${res.status})`);
+  }
+  return res.json() as Promise<ProductReviewsResponse>;
+}
+
+export async function submitProductReview(
+  productId: number,
+  rating: number,
+  comment: string | null,
+): Promise<{
+  review: ProductReview;
+  average_rating: number | null;
+  review_count: number;
+}> {
+  const res = await fetch(`${apiBase()}/api/products/${productId}/reviews`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...bearerHeaders(),
+    },
+    body: JSON.stringify({ rating, comment: comment || null }),
+  });
+  if (!res.ok) {
+    let msg = `Could not submit review (HTTP ${res.status})`;
+    try {
+      const body = (await res.json()) as {
+        message?: string;
+        errors?: Record<string, string[]>;
+      };
+      const first = body.errors && Object.values(body.errors)[0]?.[0];
+      if (first) msg = first;
+      else if (body.message) msg = body.message;
+    } catch {
+      /* ignore */
+    }
+    throw new Error(msg);
+  }
+  return res.json() as Promise<{
+    review: ProductReview;
+    average_rating: number | null;
+    review_count: number;
+  }>;
+}
+
+export async function previewPromoCode(
+  code: string,
+  subtotal: number,
+): Promise<PromoPreview> {
+  const res = await fetch(`${apiBase()}/api/promo-codes/preview`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...bearerHeaders(),
+    },
+    body: JSON.stringify({ code, subtotal }),
+  });
+  const data = (await res.json().catch(() => null)) as PromoPreview | null;
+  if (!data) {
+    throw new Error(`Could not validate promo code (HTTP ${res.status})`);
+  }
+  return data;
 }

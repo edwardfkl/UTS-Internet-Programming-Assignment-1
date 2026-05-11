@@ -14,12 +14,21 @@ return [
         'clear' => 'Clear',
     ],
 
+    'bulk' => [
+        'selected' => 'selected',
+        'set_status' => 'Set status to',
+        'apply_status' => 'Apply status',
+        'delete_selected' => 'Delete selected',
+        'confirm_delete' => 'Delete the selected rows? This cannot be undone.',
+    ],
+
     'nav' => [
         'brand' => 'Admin',
         'dashboard' => 'Dashboard',
         'users' => 'Users',
         'products' => 'Products',
         'orders' => 'Orders',
+        'promo_codes' => 'Promo codes',
         'logout' => 'Log out',
     ],
 
@@ -60,6 +69,7 @@ return [
         'col_id' => 'ID',
         'col_name' => 'Name',
         'col_email' => 'Email',
+        'col_status' => 'Status',
         'col_admin' => 'Admin',
         'col_created' => 'Created',
         'col_updated' => 'Updated',
@@ -68,6 +78,20 @@ return [
         'empty' => 'No users yet.',
         'edit_link' => 'Edit',
         'search_placeholder' => 'Search name or email…',
+        'filter_status' => 'Status',
+        'filter_status_all' => 'All',
+
+        'status_labels' => [
+            'active' => 'Active',
+            'suspended' => 'Suspended',
+            'banned' => 'Banned',
+        ],
+
+        'bulk' => [
+            'deleted' => 'Deleted :count user(s).',
+            'status_updated' => 'Updated :count user(s) to ":status".',
+            'skipped' => 'Skipped: :list.',
+        ],
 
         'edit' => [
             'meta_title' => 'Edit user',
@@ -78,6 +102,8 @@ return [
             'avatar_url' => 'Avatar image URL',
             'avatar_placeholder' => 'https://…',
             'admin_access' => 'Admin access',
+            'status' => 'Account status',
+            'status_hint' => 'Suspended and banned accounts cannot log in.',
             'phone' => 'Phone',
             'shipping_legend' => 'Default shipping (stored on user)',
             'recipient' => 'Recipient name',
@@ -101,6 +127,7 @@ return [
         'add' => 'Add product',
         'col_id' => 'ID',
         'col_name' => 'Name',
+        'col_status' => 'Status',
         'col_price' => 'Price',
         'col_stock' => 'Stock',
         'col_created' => 'Created',
@@ -109,6 +136,20 @@ return [
         'empty' => 'No products. Add one or run seeders.',
         'edit_link' => 'Edit',
         'search_placeholder' => 'Search name or description…',
+        'filter_status' => 'Status',
+        'filter_status_all' => 'All',
+
+        'status_labels' => [
+            'active' => 'Listed',
+            'inactive' => 'Unlisted',
+            'draft' => 'Draft',
+        ],
+
+        'bulk' => [
+            'deleted' => 'Deleted :count product(s).',
+            'status_updated' => 'Updated :count product(s) to ":status".',
+            'skipped' => 'Skipped: :list.',
+        ],
 
         'form' => [
             'name' => 'Name',
@@ -117,6 +158,8 @@ return [
             'stock' => 'Stock',
             'image_url' => 'Image URL',
             'url_placeholder' => 'https://…',
+            'status' => 'Status',
+            'status_hint' => 'Only "Listed" products appear on the storefront. Draft is admin-only.',
         ],
 
         'create' => [
@@ -159,7 +202,16 @@ return [
 
         'status_labels' => [
             'cart' => 'Draft cart',
-            'pending_payment' => 'Pending',
+            'pending_payment' => 'Pending payment',
+            'paid' => 'Paid',
+            'shipped' => 'Shipped',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ],
+
+        'bulk' => [
+            'deleted' => 'Deleted :count order(s).',
+            'status_updated' => 'Updated :count order(s) to ":status".',
         ],
 
         'show' => [
@@ -172,6 +224,8 @@ return [
             'user' => 'User',
             'payment_method' => 'Payment method',
             'placed_at' => 'Placed at',
+            'promo_code' => 'Promo code',
+            'total' => 'Subtotal − discount = total',
             'shipping' => 'Shipping',
             'line_items' => 'Line items',
             'col_product' => 'Product',
@@ -190,6 +244,7 @@ return [
             'all_orders' => 'All orders',
             'token_note' => 'Token is read-only:',
             'status' => 'Status',
+            'status_flow_hint' => 'Typical flow: pending_payment → paid → shipped → completed.',
             'payment_method' => 'Payment method',
             'placed_at' => 'Placed at',
             'linked_user' => 'Linked user',
@@ -218,6 +273,71 @@ return [
             'unit_price' => 'Unit price',
             'delete_confirm' => 'Remove this line from the order?',
             'delete' => 'Delete line item',
+        ],
+    ],
+
+    'promo_codes' => [
+        'title' => 'Promo codes',
+        'heading' => 'Promo codes',
+        'intro' => 'Discount codes available to customers at checkout.',
+        'add' => 'Add promo code',
+        'col_id' => 'ID',
+        'col_code' => 'Code',
+        'col_label' => 'Label',
+        'col_type' => 'Type',
+        'col_amount' => 'Amount',
+        'col_window' => 'Active window',
+        'col_status' => 'Status',
+        'col_actions' => 'Actions',
+        'empty' => 'No promo codes yet.',
+        'edit_link' => 'Edit',
+        'search_placeholder' => 'Search code or label…',
+        'filter_status' => 'Status',
+        'filter_status_all' => 'All',
+        'always' => 'Always',
+        'min_short' => 'min :amount',
+
+        'status_labels' => [
+            'active' => 'Active',
+            'inactive' => 'Inactive',
+        ],
+
+        'type_labels' => [
+            'fixed' => 'Fixed amount',
+            'percent' => 'Percentage',
+        ],
+
+        'bulk' => [
+            'deleted' => 'Deleted :count promo code(s).',
+            'status_updated' => 'Updated :count promo code(s) to ":status".',
+        ],
+
+        'form' => [
+            'code' => 'Code',
+            'code_hint' => 'Uppercase letters, digits, dashes or underscores.',
+            'label' => 'Display label (optional)',
+            'type' => 'Discount type',
+            'amount' => 'Amount',
+            'amount_hint' => 'Use whole amount for "Fixed" (e.g. 10 = HK$10) or percent for "Percentage" (e.g. 15 = 15%).',
+            'min_subtotal' => 'Minimum subtotal (optional)',
+            'min_subtotal_hint' => 'Cart subtotal must reach this amount before the code applies.',
+            'starts_at' => 'Starts at (optional)',
+            'ends_at' => 'Ends at (optional)',
+            'is_active' => 'Active (customers can use this code)',
+        ],
+
+        'create' => [
+            'meta_title' => 'New promo code',
+            'heading' => 'New promo code',
+            'back' => '← Back to promo codes',
+        ],
+
+        'edit' => [
+            'meta_title' => 'Edit promo code',
+            'heading' => 'Edit: :code',
+            'back' => '← Back to promo codes',
+            'delete_confirm' => 'Delete this promo code? Customers will no longer be able to apply it.',
+            'delete' => 'Delete promo code',
         ],
     ],
 ];

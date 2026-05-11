@@ -50,11 +50,7 @@
     "checkoutCompleteHint": "此代號已連結至待付款訂單。若要加入更多商品，請開始新購物車。",
     "startNewCart": "新購物車",
     "emptyDefault": "購物車是空的。請從目錄加入商品或開啟商品頁。",
-    "emptyProduct": "購物車是空的。請加入此商品或瀏覽目錄。",
-    "savedOnServer": "已儲存在伺服器",
-    "savedOnServerHint": "明細已存在資料庫，此瀏覽器只保存訂單代號。可複製連結以便在其他裝置或清除資料後再次開啟同一購物車。",
-    "copyCartLink": "複製購物車連結",
-    "copied": "已複製"
+    "emptyProduct": "購物車是空的。請加入此商品或瀏覽目錄。"
   },
   "home": {
     "catalogueSr": "商品目錄",
@@ -71,7 +67,21 @@
     "backToCatalogue": "返回目錄",
     "notFoundHint": "此商品可能已下架或連結無效。",
     "detailQtySr": "數量",
-    "reviewCount": "{count}個評論"
+    "reviewCount": "{count}個評論",
+    "reviewsTitle": "用戶評價",
+    "noReviewsYet": "暫時未有評價。",
+    "averageOfCount": "平均 {average} 分（{count} 則評論）",
+    "leaveAReview": "留低你嘅評價",
+    "updateYourReview": "更新你嘅評價",
+    "submitReview": "提交評價",
+    "updateReview": "更新評價",
+    "submittingReview": "送出中…",
+    "commentLabel": "留言（選填）",
+    "commentPlaceholder": "覺得呢件貨點呀？",
+    "reviewSaved": "評價已儲存。",
+    "loginToReviewPrompt": "登入後先可以留評價。",
+    "anonymousReviewer": "匿名用戶",
+    "starsAria": "評 {count} 粒星"
   },
   "login": {
     "title": "登入",
@@ -93,6 +103,7 @@
     "title": "帳戶",
     "signedInAs": "目前登入",
     "intro": "更新聯絡方式與預設收件地址，結帳時可自動帶入。",
+    "viewOrderHistory": "查看訂單紀錄 →",
     "changePassword": "變更密碼",
     "changePasswordHint": "請輸入目前密碼，再設定新密碼（至少 8 個字元）。",
     "currentPassword": "目前密碼",
@@ -124,6 +135,8 @@
     "signedInDelivery": "你已以 {email} 登入。請先填寫收件資料。",
     "editProfileLink": "編輯已儲存的個人資料與地址",
     "orderSummary": "訂單摘要",
+    "subtotal": "小計",
+    "discount": "折扣",
     "deliveryAddress": "收件地址",
     "recipientName": "收件人姓名",
     "addressLine1": "地址第一行",
@@ -162,7 +175,41 @@
         "description": "於網路銀行使用 Biller 代碼與參考編號付款（若銀行支援 BPAY View）。"
       }
     },
-    "promoCode": "優惠碼"
+    "promoCode": "優惠碼",
+    "promo": {
+      "placeholder": "輸入優惠碼，例如 WELCOME10",
+      "hint": "可試 WELCOME10 減 HK$10，或 SAVE20 減 HK$20。",
+      "apply": "套用",
+      "applying": "驗證中…",
+      "applied": "已套用",
+      "remove": "移除",
+      "invalid": "優惠碼無效或已過期。"
+    }
+  },
+  "accountOrders": {
+    "tagline": "訂單紀錄",
+    "title": "訂單紀錄",
+    "intro": "你已落單的訂單會喺度顯示，狀態會隨住管理員處理而更新。",
+    "backToAccount": "← 返回我的帳戶",
+    "empty": "你仲未有任何訂單。",
+    "startShopping": "去逛逛 →",
+    "itemCount": "{count} 件商品",
+    "col": {
+      "reference": "訂單編號",
+      "placed": "落單時間",
+      "items": "商品數",
+      "payment": "付款方式",
+      "total": "金額",
+      "status": "狀態"
+    },
+    "status": {
+      "cart": "暫存",
+      "pending_payment": "待付款",
+      "paid": "已付款",
+      "shipped": "已寄出",
+      "completed": "已完成",
+      "cancelled": "已取消"
+    }
   },
   "payDetail": {
     "amountDue": "應付金額",
@@ -190,6 +237,7 @@
   "avatar": {
     "openMenu": "開啟選單（{name}）",
     "myAccount": "我的帳戶",
+    "orderHistory": "訂單紀錄",
     "changePassword": "變更密碼",
     "adminPanel": "管理後台",
     "logOut": "登出"

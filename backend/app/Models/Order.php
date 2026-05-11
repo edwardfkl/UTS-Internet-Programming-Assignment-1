@@ -17,11 +17,37 @@ class Order extends Model
 
     public const STATUS_PENDING_PAYMENT = 'pending_payment';
 
+    public const STATUS_PAID = 'paid';
+
+    public const STATUS_SHIPPED = 'shipped';
+
+    public const STATUS_COMPLETED = 'completed';
+
+    public const STATUS_CANCELLED = 'cancelled';
+
+    /**
+     * Statuses that an admin can pick when editing.
+     *
+     * @var list<string>
+     */
+    public const EDITABLE_STATUSES = [
+        self::STATUS_CART,
+        self::STATUS_PENDING_PAYMENT,
+        self::STATUS_PAID,
+        self::STATUS_SHIPPED,
+        self::STATUS_COMPLETED,
+        self::STATUS_CANCELLED,
+    ];
+
     protected $fillable = [
         'user_id',
         'token',
         'status',
         'payment_method',
+        'promo_code',
+        'discount_amount',
+        'subtotal_amount',
+        'total_amount',
         'placed_at',
         'shipping_recipient_name',
         'shipping_phone',
@@ -37,6 +63,9 @@ class Order extends Model
     {
         return [
             'placed_at' => 'datetime',
+            'discount_amount' => 'decimal:2',
+            'subtotal_amount' => 'decimal:2',
+            'total_amount' => 'decimal:2',
         ];
     }
 

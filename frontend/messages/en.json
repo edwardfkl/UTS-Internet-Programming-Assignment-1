@@ -50,11 +50,7 @@
     "checkoutCompleteHint": "This token is tied to an order awaiting payment. Start a new cart to add more items.",
     "startNewCart": "Start new cart",
     "emptyDefault": "Your cart is empty. Add products from the catalogue or open a product page.",
-    "emptyProduct": "Your cart is empty. Add this product or browse the catalogue.",
-    "savedOnServer": "Saved on server",
-    "savedOnServerHint": "Line items live in your database. This browser stores only the order token. Copy a link to reopen the same cart elsewhere or after clearing site data.",
-    "copyCartLink": "Copy cart link",
-    "copied": "Copied"
+    "emptyProduct": "Your cart is empty. Add this product or browse the catalogue."
   },
   "home": {
     "catalogueSr": "Product catalogue",
@@ -71,7 +67,21 @@
     "backToCatalogue": "Back to catalogue",
     "notFoundHint": "This product may have been removed or the link is invalid.",
     "detailQtySr": "Quantity",
-    "reviewCount": "{count} reviews"
+    "reviewCount": "{count} reviews",
+    "reviewsTitle": "Reviews",
+    "noReviewsYet": "No reviews yet.",
+    "averageOfCount": "Average {average} from {count} reviews",
+    "leaveAReview": "Share your thoughts",
+    "updateYourReview": "Update your review",
+    "submitReview": "Submit review",
+    "updateReview": "Update review",
+    "submittingReview": "Sending…",
+    "commentLabel": "Comment (optional)",
+    "commentPlaceholder": "What did you think?",
+    "reviewSaved": "Review saved.",
+    "loginToReviewPrompt": "Log in to leave a review.",
+    "anonymousReviewer": "Anonymous",
+    "starsAria": "Rate {count} stars"
   },
   "login": {
     "title": "Log in",
@@ -93,6 +103,7 @@
     "title": "Account",
     "signedInAs": "Signed in as",
     "intro": "Update your contact details and default shipping address. Checkout can pre-fill from here.",
+    "viewOrderHistory": "View order history →",
     "changePassword": "Change password",
     "changePasswordHint": "Enter your current password, then choose a new one (at least 8 characters).",
     "currentPassword": "Current password",
@@ -124,6 +135,8 @@
     "signedInDelivery": "You are signed in as {email}. Delivery details are required before payment.",
     "editProfileLink": "Edit saved profile & address",
     "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
     "deliveryAddress": "Delivery address",
     "recipientName": "Recipient name",
     "addressLine1": "Address line 1",
@@ -162,7 +175,41 @@
         "description": "Pay from online banking using our biller code and your reference (BPAY View compatible where available)."
       }
     },
-    "promoCode": "Promo code"
+    "promoCode": "Promo code",
+    "promo": {
+      "placeholder": "Enter code, e.g. WELCOME10",
+      "hint": "Try WELCOME10 for HK$10 off, or SAVE20 for HK$20 off.",
+      "apply": "Apply",
+      "applying": "Checking…",
+      "applied": "Applied",
+      "remove": "Remove",
+      "invalid": "Invalid or expired promo code."
+    }
+  },
+  "accountOrders": {
+    "tagline": "Order history",
+    "title": "Order history",
+    "intro": "Orders you have placed appear here. Status updates as the admin processes them.",
+    "backToAccount": "← Back to account",
+    "empty": "You have not placed any orders yet.",
+    "startShopping": "Start shopping →",
+    "itemCount": "{count} item(s)",
+    "col": {
+      "reference": "Reference",
+      "placed": "Placed at",
+      "items": "Items",
+      "payment": "Payment",
+      "total": "Total",
+      "status": "Status"
+    },
+    "status": {
+      "cart": "Draft cart",
+      "pending_payment": "Pending payment",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
   },
   "payDetail": {
     "amountDue": "Amount due",
@@ -190,6 +237,7 @@
   "avatar": {
     "openMenu": "Open user menu ({name})",
     "myAccount": "My account",
+    "orderHistory": "Order history",
     "changePassword": "Change password",
     "adminPanel": "Admin panel",
     "logOut": "Log out"

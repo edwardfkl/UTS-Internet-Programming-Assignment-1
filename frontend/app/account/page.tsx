@@ -166,6 +166,14 @@ export default function AccountPage() {
           </p>
         </div>
         <p className="mt-2 text-sm text-stone-600">{t("account.intro")}</p>
+        <p className="mt-3 text-sm">
+          <Link
+            href="/account/orders"
+            className="font-medium text-amber-900 hover:underline"
+          >
+            {t("account.viewOrderHistory")}
+          </Link>
+        </p>
 
         {loading ? (
           <p className="mt-8 text-stone-500">{t("common.loadingProfile")}</p>

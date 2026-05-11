@@ -14,12 +14,21 @@ return [
         'clear' => '지우기',
     ],
 
+    'bulk' => [
+        'selected' => '개 선택됨',
+        'set_status' => '상태 변경',
+        'apply_status' => '상태 적용',
+        'delete_selected' => '선택 삭제',
+        'confirm_delete' => '선택한 항목을 삭제할까요? 되돌릴 수 없습니다.',
+    ],
+
     'nav' => [
         'brand' => '관리자',
         'dashboard' => '대시보드',
         'users' => '사용자',
         'products' => '상품',
         'orders' => '주문',
+        'promo_codes' => '프로모 코드',
         'logout' => '로그아웃',
     ],
 
@@ -60,6 +69,7 @@ return [
         'col_id' => 'ID',
         'col_name' => '이름',
         'col_email' => '이메일',
+        'col_status' => '상태',
         'col_admin' => '관리자',
         'col_created' => '생성일',
         'col_updated' => '수정일시',
@@ -68,6 +78,20 @@ return [
         'empty' => '사용자가 없습니다.',
         'edit_link' => '편집',
         'search_placeholder' => '이름 또는 이메일 검색…',
+        'filter_status' => '상태',
+        'filter_status_all' => '전체',
+
+        'status_labels' => [
+            'active' => '활성',
+            'suspended' => '정지',
+            'banned' => '차단',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count명의 사용자를 삭제했습니다.',
+            'status_updated' => ':count명의 사용자 상태를 ":status"(으)로 변경했습니다.',
+            'skipped' => '건너뜀: :list.',
+        ],
 
         'edit' => [
             'meta_title' => '사용자 편집',
@@ -78,6 +102,8 @@ return [
             'avatar_url' => '프로필 이미지 URL',
             'avatar_placeholder' => 'https://…',
             'admin_access' => '관리자 권한',
+            'status' => '계정 상태',
+            'status_hint' => '"정지" 또는 "차단" 계정은 로그인할 수 없습니다.',
             'phone' => '전화',
             'shipping_legend' => '기본 배송지(사용자에 저장)',
             'recipient' => '수령인',
@@ -101,6 +127,7 @@ return [
         'add' => '상품 추가',
         'col_id' => 'ID',
         'col_name' => '이름',
+        'col_status' => '상태',
         'col_price' => '가격',
         'col_stock' => '재고',
         'col_created' => '생성일시',
@@ -109,6 +136,20 @@ return [
         'empty' => '상품이 없습니다. 추가하거나 시더를 실행하세요.',
         'edit_link' => '편집',
         'search_placeholder' => '이름 또는 설명 검색…',
+        'filter_status' => '상태',
+        'filter_status_all' => '전체',
+
+        'status_labels' => [
+            'active' => '판매중',
+            'inactive' => '판매중지',
+            'draft' => '임시저장',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count개의 상품을 삭제했습니다.',
+            'status_updated' => ':count개의 상품 상태를 ":status"(으)로 변경했습니다.',
+            'skipped' => '건너뜀: :list.',
+        ],
 
         'form' => [
             'name' => '이름',
@@ -117,6 +158,8 @@ return [
             'stock' => '재고',
             'image_url' => '이미지 URL',
             'url_placeholder' => 'https://…',
+            'status' => '판매 상태',
+            'status_hint' => '"판매중"인 상품만 스토어프론트에 표시됩니다. "임시저장"은 관리자 전용.',
         ],
 
         'create' => [
@@ -160,6 +203,15 @@ return [
         'status_labels' => [
             'cart' => '임시 보관',
             'pending_payment' => '결제 대기',
+            'paid' => '결제 완료',
+            'shipped' => '배송 중',
+            'completed' => '완료',
+            'cancelled' => '취소됨',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count건의 주문을 삭제했습니다.',
+            'status_updated' => ':count건의 주문 상태를 ":status"(으)로 변경했습니다.',
         ],
 
         'show' => [
@@ -172,6 +224,8 @@ return [
             'user' => '사용자',
             'payment_method' => '결제 수단',
             'placed_at' => '주문일시',
+            'promo_code' => '쿠폰 코드',
+            'total' => '소계 − 할인 = 합계',
             'shipping' => '배송',
             'line_items' => '주문 품목',
             'col_product' => '상품',
@@ -190,6 +244,7 @@ return [
             'all_orders' => '모든 주문',
             'token_note' => '토큰은 읽기 전용입니다:',
             'status' => '상태',
+            'status_flow_hint' => '일반적인 흐름: 결제 대기 → 결제 완료 → 배송 중 → 완료.',
             'payment_method' => '결제 수단',
             'placed_at' => '주문일시',
             'linked_user' => '연결된 사용자',
@@ -218,6 +273,71 @@ return [
             'unit_price' => '단가',
             'delete_confirm' => '이 줄을 주문에서 제거할까요?',
             'delete' => '품목 삭제',
+        ],
+    ],
+
+    'promo_codes' => [
+        'title' => '프로모 코드',
+        'heading' => '프로모 코드',
+        'intro' => '결제 시 사용할 수 있는 할인 코드입니다.',
+        'add' => '프로모 코드 추가',
+        'col_id' => 'ID',
+        'col_code' => '코드',
+        'col_label' => '라벨',
+        'col_type' => '유형',
+        'col_amount' => '금액',
+        'col_window' => '유효 기간',
+        'col_status' => '상태',
+        'col_actions' => '작업',
+        'empty' => '프로모 코드가 없습니다.',
+        'edit_link' => '편집',
+        'search_placeholder' => '코드 또는 라벨 검색…',
+        'filter_status' => '상태',
+        'filter_status_all' => '전체',
+        'always' => '상시',
+        'min_short' => '최소 :amount',
+
+        'status_labels' => [
+            'active' => '활성',
+            'inactive' => '비활성',
+        ],
+
+        'type_labels' => [
+            'fixed' => '고정 금액',
+            'percent' => '퍼센트',
+        ],
+
+        'bulk' => [
+            'deleted' => ':count개의 프로모 코드를 삭제했습니다.',
+            'status_updated' => ':count개의 프로모 코드 상태를 ":status"(으)로 변경했습니다.',
+        ],
+
+        'form' => [
+            'code' => '코드',
+            'code_hint' => '대문자, 숫자, 하이픈, 밑줄만 사용 가능합니다.',
+            'label' => '표시 라벨(선택)',
+            'type' => '할인 유형',
+            'amount' => '금액',
+            'amount_hint' => '"고정 금액"은 정수(예: 10 = HK$10), "퍼센트"는 백분율(예: 15 = 15%).',
+            'min_subtotal' => '최소 소계(선택)',
+            'min_subtotal_hint' => '장바구니 소계가 이 금액 이상일 때만 적용됩니다.',
+            'starts_at' => '시작 일시(선택)',
+            'ends_at' => '종료 일시(선택)',
+            'is_active' => '활성(고객이 사용 가능)',
+        ],
+
+        'create' => [
+            'meta_title' => '새 프로모 코드',
+            'heading' => '새 프로모 코드',
+            'back' => '← 프로모 코드 목록',
+        ],
+
+        'edit' => [
+            'meta_title' => '프로모 코드 편집',
+            'heading' => '편집: :code',
+            'back' => '← 프로모 코드 목록',
+            'delete_confirm' => '이 프로모 코드를 삭제할까요? 고객은 더 이상 사용할 수 없습니다.',
+            'delete' => '프로모 코드 삭제',
         ],
     ],
 ];

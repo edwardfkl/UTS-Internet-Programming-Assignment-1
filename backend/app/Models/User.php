@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 #[Fillable([
-    'name', 'email', 'avatar_url', 'password', 'is_admin',
+    'name', 'email', 'avatar_url', 'password', 'is_admin', 'status',
     'phone',
     'shipping_recipient_name',
     'shipping_line1',
@@ -28,9 +28,36 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_SUSPENDED = 'suspended';
+
+    public const STATUS_BANNED = 'banned';
+
+    /**
+     * Allowed account statuses. Order matters for admin UIs (active first).
+     *
+     * @var list<string>
+     */
+    public const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_SUSPENDED,
+        self::STATUS_BANNED,
+    ];
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
     }
 
     /**

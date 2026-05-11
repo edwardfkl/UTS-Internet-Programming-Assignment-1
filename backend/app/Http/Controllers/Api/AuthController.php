@@ -52,6 +52,18 @@ class AuthController extends Controller
         }
 
         $user = User::query()->where('email', $data['email'])->firstOrFail();
+
+        if (! $user->isActive()) {
+            Auth::logout();
+
+            return response()->json([
+                'message' => $user->status === User::STATUS_BANNED
+                    ? 'This account has been banned. Please contact support.'
+                    : 'This account is suspended. Please contact support.',
+                'status' => $user->status,
+            ], 403);
+        }
+
         $token = $this->jwtService->issueToken($user);
 
         return response()->json([

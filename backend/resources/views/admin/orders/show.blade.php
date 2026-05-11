@@ -37,6 +37,20 @@
             <dt class="font-medium text-zinc-600">{{ __('admin.orders.show.placed_at') }}</dt>
             <dd class="mt-1 text-zinc-900"><x-local-datetime :at="$order->placed_at" :with-seconds="true" :fallback="__('admin.common.none')"/></dd>
         </div>
+        <div>
+            <dt class="font-medium text-zinc-600">{{ __('admin.orders.show.promo_code') }}</dt>
+            <dd class="mt-1 text-zinc-900 font-mono text-xs">{{ $order->promo_code ?? __('admin.common.none') }}</dd>
+        </div>
+        <div>
+            <dt class="font-medium text-zinc-600">{{ __('admin.orders.show.total') }}</dt>
+            <dd class="mt-1 text-zinc-900 tabular-nums">
+                {{ number_format((float) $order->subtotal_amount, 2) }}
+                @if ((float) $order->discount_amount > 0)
+                    − {{ number_format((float) $order->discount_amount, 2) }}
+                @endif
+                = <strong>{{ number_format((float) $order->total_amount, 2) }}</strong>
+            </dd>
+        </div>
     </dl>
 
     @if ($order->shipping_line1)

@@ -7,7 +7,11 @@ import { ShopHeader } from "@/components/ShopHeader";
 import { useAuth } from "@/contexts/auth-context";
 import { useLocale } from "@/contexts/locale-context";
 import { useCart } from "@/hooks/useCart";
-import { placeOrder, resetCartSession } from "@/lib/api";
+import {
+  placeOrder,
+  previewPromoCode,
+  resetCartSession,
+} from "@/lib/api";
 import { money } from "@/lib/money";
 import {
   PAYMENT_OPTIONS,
@@ -48,6 +52,15 @@ export default function CheckoutPage() {
   });
 
   const [promoCode, setPromoCode] = useState<string>("");
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discount: number;
+  } | null>(null);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoBusy, setPromoBusy] = useState(false);
+
+  const discount = appliedPromo?.discount ?? 0;
+  const totalAfterDiscount = Math.max(cartTotal - discount, 0);
 
   useEffect(() => {
     if (!authReady) return;
@@ -89,6 +102,41 @@ export default function CheckoutPage() {
     router.replace("/");
   }, [cartLoading, cartLines.length, done, cartStatus, router]);
 
+  useEffect(() => {
+    if (!appliedPromo || cartTotal <= 0) {
+      if (cartTotal <= 0 && appliedPromo) {
+        setAppliedPromo(null);
+      }
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await previewPromoCode(appliedPromo.code, cartTotal);
+        if (cancelled) return;
+        if (result.valid) {
+          setAppliedPromo((prev) =>
+            prev
+              ? {
+                  code: result.code ?? prev.code,
+                  discount: result.discount,
+                }
+              : prev,
+          );
+        } else {
+          setAppliedPromo(null);
+          setPromoError(result.message ?? t("checkout.promo.invalid"));
+        }
+      } catch {
+        /* leave the existing discount in place */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartTotal]);
+
   async function onSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     setFormError(null);
@@ -99,7 +147,8 @@ export default function CheckoutPage() {
         cartToken,
         method,
         shipping,
-        saveToProfile
+        saveToProfile,
+        appliedPromo?.code ?? null,
       );
       setDone(result);
       await resetCartSession();
@@ -110,6 +159,37 @@ export default function CheckoutPage() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function onApplyPromo(): Promise<void> {
+    const code = promoCode.trim();
+    if (!code) return;
+    setPromoError(null);
+    setPromoBusy(true);
+    try {
+      const result = await previewPromoCode(code, cartTotal);
+      if (!result.valid) {
+        setAppliedPromo(null);
+        setPromoError(result.message ?? t("checkout.promo.invalid"));
+        return;
+      }
+      setAppliedPromo({
+        code: result.code ?? code.toUpperCase(),
+        discount: result.discount,
+      });
+    } catch (err) {
+      setPromoError(
+        err instanceof Error ? err.message : t("checkout.promo.invalid"),
+      );
+    } finally {
+      setPromoBusy(false);
+    }
+  }
+
+  function onRemovePromo(): void {
+    setAppliedPromo(null);
+    setPromoError(null);
+    setPromoCode("");
   }
 
   if (!authReady || !user) {
@@ -127,7 +207,7 @@ export default function CheckoutPage() {
     const blocks = paymentDetailBlocks(
       done.payment_method,
       done.order_reference,
-      money.format(done.total),
+      money.format(done.total_amount),
       t
     );
     const s = done.shipping;
@@ -186,9 +266,32 @@ export default function CheckoutPage() {
                 </span>
               </li>
             ))}
+            <li className="flex justify-between border-t border-stone-200 pt-3 text-stone-700">
+              <span>{t("checkout.subtotal")}</span>
+              <span className="tabular-nums">
+                {money.format(done.subtotal_amount)}
+              </span>
+            </li>
+            {done.discount_amount > 0 ? (
+              <li className="flex justify-between text-emerald-800">
+                <span>
+                  {t("checkout.discount")}{" "}
+                  {done.promo_code ? (
+                    <span className="font-mono text-xs">
+                      ({done.promo_code})
+                    </span>
+                  ) : null}
+                </span>
+                <span className="tabular-nums">
+                  −{money.format(done.discount_amount)}
+                </span>
+              </li>
+            ) : null}
             <li className="flex justify-between border-t border-stone-200 pt-3 font-medium text-stone-900">
               <span>{t("checkout.totalDue")}</span>
-              <span className="tabular-nums">{money.format(done.total)}</span>
+              <span className="tabular-nums">
+                {money.format(done.total_amount)}
+              </span>
             </li>
           </ul>
           <div className="mt-8 space-y-6">
@@ -300,9 +403,32 @@ export default function CheckoutPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 flex justify-between border-t border-stone-200 pt-4 text-base font-semibold">
-                <span>{t("common.total")}</span>
-                <span className="tabular-nums">{money.format(cartTotal)}</span>
+              <div className="mt-4 space-y-2 border-t border-stone-200 pt-4 text-sm text-stone-700">
+                <div className="flex justify-between">
+                  <span>{t("checkout.subtotal")}</span>
+                  <span className="tabular-nums">
+                    {money.format(cartTotal)}
+                  </span>
+                </div>
+                {appliedPromo ? (
+                  <div className="flex justify-between text-emerald-800">
+                    <span>
+                      {t("checkout.discount")}{" "}
+                      <span className="font-mono text-xs text-emerald-900">
+                        ({appliedPromo.code})
+                      </span>
+                    </span>
+                    <span className="tabular-nums">
+                      −{money.format(discount)}
+                    </span>
+                  </div>
+                ) : null}
+                <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-semibold text-stone-900">
+                  <span>{t("common.total")}</span>
+                  <span className="tabular-nums">
+                    {money.format(totalAfterDiscount)}
+                  </span>
+                </div>
               </div>
             </section>
 
@@ -471,11 +597,54 @@ export default function CheckoutPage() {
               <h2 className="font-display text-lg font-semibold text-stone-900">
                 {t("checkout.promoCode")}
               </h2>
-              <input
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-stone-200 px-3 py-2"
-              />
+              <p className="mt-1 text-xs text-stone-500">
+                {t("checkout.promo.hint")}
+              </p>
+              {appliedPromo ? (
+                <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm">
+                  <span className="text-emerald-900">
+                    {t("checkout.promo.applied")}{" "}
+                    <span className="font-mono">{appliedPromo.code}</span>{" "}
+                    <span className="font-medium">
+                      −{money.format(appliedPromo.discount)}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onRemovePromo}
+                    className="ml-auto rounded-md border border-emerald-300 bg-white px-2 py-1 text-xs font-medium text-emerald-900 hover:bg-emerald-100"
+                  >
+                    {t("checkout.promo.remove")}
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-3 flex flex-wrap items-stretch gap-2">
+                  <input
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    placeholder={t("checkout.promo.placeholder")}
+                    className="flex-1 rounded-lg border border-stone-200 px-3 py-2 text-sm"
+                  />
+                  <button
+                    type="button"
+                    disabled={promoBusy || !promoCode.trim()}
+                    onClick={() => void onApplyPromo()}
+                    className="rounded-lg border border-amber-800 px-4 py-2 text-sm font-medium text-amber-900 hover:bg-amber-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {promoBusy
+                      ? t("checkout.promo.applying")
+                      : t("checkout.promo.apply")}
+                  </button>
+                </div>
+              )}
+              {promoError ? (
+                <p
+                  className="mt-2 text-sm text-red-800"
+                  role="alert"
+                >
+                  {promoError}
+                </p>
+              ) : null}
             </section>
 
             {formError ? (

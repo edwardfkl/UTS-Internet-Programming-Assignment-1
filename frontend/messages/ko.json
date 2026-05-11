@@ -50,11 +50,7 @@
     "checkoutCompleteHint": "이 토큰은 결제 대기 주문에 연결되어 있습니다. 더 담으려면 새 장바구니를 시작하세요.",
     "startNewCart": "새 장바구니",
     "emptyDefault": "장바구니가 비었습니다. 카탈로그에서 담거나 상품 페이지를 여세요.",
-    "emptyProduct": "장바구니가 비었습니다. 이 상품을 담거나 카탈로그를 둘러보세요.",
-    "savedOnServer": "서버에 저장됨",
-    "savedOnServerHint": "항목은 데이터베이스에 있으며 이 브라우저에는 주문 토큰만 저장됩니다. 링크를 복사해 다른 기기나 데이터 삭제 후 같은 장바구니를 열 수 있습니다.",
-    "copyCartLink": "장바구니 링크 복사",
-    "copied": "복사됨"
+    "emptyProduct": "장바구니가 비었습니다. 이 상품을 담거나 카탈로그를 둘러보세요."
   },
   "home": {
     "catalogueSr": "상품 카탈로그",
@@ -71,7 +67,21 @@
     "backToCatalogue": "카탈로그로",
     "notFoundHint": "삭제되었거나 링크가 잘못된 상품입니다.",
     "detailQtySr": "수량",
-    "reviewCount": "리뷰 {count}개"
+    "reviewCount": "리뷰 {count}개",
+    "reviewsTitle": "리뷰",
+    "noReviewsYet": "아직 리뷰가 없습니다.",
+    "averageOfCount": "평균 {average}점 ({count}개 리뷰)",
+    "leaveAReview": "리뷰 남기기",
+    "updateYourReview": "리뷰 수정",
+    "submitReview": "리뷰 제출",
+    "updateReview": "리뷰 업데이트",
+    "submittingReview": "전송 중…",
+    "commentLabel": "코멘트 (선택)",
+    "commentPlaceholder": "어떠셨나요?",
+    "reviewSaved": "리뷰가 저장되었습니다.",
+    "loginToReviewPrompt": "리뷰를 작성하려면 로그인하세요.",
+    "anonymousReviewer": "익명 사용자",
+    "starsAria": "별 {count}개 평가"
   },
   "login": {
     "title": "로그인",
@@ -93,6 +103,7 @@
     "title": "계정",
     "signedInAs": "로그인:",
     "intro": "연락처와 기본 배송지를 업데이트하세요. 결제 시 자동으로 채워집니다.",
+    "viewOrderHistory": "주문 내역 보기 →",
     "changePassword": "비밀번호 변경",
     "changePasswordHint": "현재 비밀번호를 입력한 뒤 새 비밀번호(8자 이상)를 설정하세요.",
     "currentPassword": "현재 비밀번호",
@@ -124,6 +135,8 @@
     "signedInDelivery": "{email}(으)로 로그인되어 있습니다. 배송 정보를 입력해야 합니다.",
     "editProfileLink": "저장된 프로필·주소 편집",
     "orderSummary": "주문 요약",
+    "subtotal": "소계",
+    "discount": "할인",
     "deliveryAddress": "배송 주소",
     "recipientName": "수령인",
     "addressLine1": "주소 1행",
@@ -162,7 +175,41 @@
         "description": "온라인 뱅킹에서 Biller 코드와 참조 번호로 납부(BPAY View는 금융사에 따라 다름)."
       }
     },
-    "promoCode": "쿠폰 코드"
+    "promoCode": "쿠폰 코드",
+    "promo": {
+      "placeholder": "코드 입력 (예: WELCOME10)",
+      "hint": "WELCOME10 으로 HK$10 할인, SAVE20 으로 HK$20 할인.",
+      "apply": "적용",
+      "applying": "확인 중…",
+      "applied": "적용됨",
+      "remove": "제거",
+      "invalid": "잘못되었거나 만료된 쿠폰 코드입니다."
+    }
+  },
+  "accountOrders": {
+    "tagline": "주문 내역",
+    "title": "주문 내역",
+    "intro": "주문 상태는 관리자가 처리함에 따라 갱신됩니다.",
+    "backToAccount": "← 계정으로 돌아가기",
+    "empty": "아직 주문 내역이 없습니다.",
+    "startShopping": "쇼핑 시작 →",
+    "itemCount": "{count}개 상품",
+    "col": {
+      "reference": "주문번호",
+      "placed": "주문 일시",
+      "items": "수량",
+      "payment": "결제",
+      "total": "금액",
+      "status": "상태"
+    },
+    "status": {
+      "cart": "임시 보관",
+      "pending_payment": "결제 대기",
+      "paid": "결제 완료",
+      "shipped": "배송 중",
+      "completed": "완료",
+      "cancelled": "취소됨"
+    }
   },
   "payDetail": {
     "amountDue": "결제 금액",
@@ -190,6 +237,7 @@
   "avatar": {
     "openMenu": "사용자 메뉴 열기 ({name})",
     "myAccount": "내 계정",
+    "orderHistory": "주문 내역",
     "changePassword": "비밀번호 변경",
     "adminPanel": "관리자",
     "logOut": "로그아웃"

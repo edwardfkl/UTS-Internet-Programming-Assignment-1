@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,12 +35,25 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        /** @var User|null $user */
         $user = Auth::user();
         if (! $user || ! $user->is_admin) {
             Auth::logout();
 
             return back()->withErrors([
                 'email' => __('This account is not authorised for admin access.'),
+            ])->onlyInput('email');
+        }
+
+        if (! $user->isActive()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()->withErrors([
+                'email' => __('This account is currently :status. Please contact support.', [
+                    'status' => $user->status,
+                ]),
             ])->onlyInput('email');
         }
 
