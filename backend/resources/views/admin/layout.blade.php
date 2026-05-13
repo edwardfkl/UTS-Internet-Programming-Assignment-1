@@ -47,5 +47,6 @@
         @yield('content')
     </main>
     @include('admin.partials.local-datetime-script')
+    @include('admin.partials.live-search-script')
 </body>
 </html>

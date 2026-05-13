@@ -16,7 +16,7 @@
            class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">{{ __('admin.promo_codes.add') }}</a>
     </div>
 
-    <form method="get" action="{{ route('admin.promo-codes.index') }}" class="mt-6 flex flex-wrap items-end gap-3">
+    <form method="get" action="{{ route('admin.promo-codes.index') }}" data-admin-live-search class="mt-6 flex flex-wrap items-end gap-3">
         <input type="hidden" name="sort" value="{{ $sort }}">
         <input type="hidden" name="dir" value="{{ $dir }}">
         <div class="min-w-[180px]">
@@ -35,12 +35,6 @@
                    placeholder="{{ __('admin.promo_codes.search_placeholder') }}"
                    class="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-900">
         </div>
-        <button type="submit"
-                class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">{{ __('admin.common.search_submit') }}</button>
-        @if (! empty($q) || $statusFilter !== null)
-            <a href="{{ route('admin.promo-codes.index', ['sort' => $sort, 'dir' => $dir]) }}"
-               class="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-800 hover:bg-zinc-50">{{ __('admin.common.clear') }}</a>
-        @endif
     </form>
 
     <form method="post" action="{{ route('admin.promo-codes.bulk') }}" data-bulk-form class="mt-4">
