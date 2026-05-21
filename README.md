@@ -36,6 +36,36 @@ This project takes the third path and packages the non-trivial parts so a single
 
 A multi-store chain, marketplace with multiple sellers, or a business that needs warehouse / shipping integrations out of the box. Those workloads are better served by the SaaS platforms above; this codebase is intentionally a small, owned, single-tenant vertical slice.
 
+## Group members and workload allocation
+
+This is a **two-person group**. Work was split by feature area rather than by layer only, so both members touched integration points (API contracts, i18n keys) where needed. Individual commits are visible on the shared Git repository (`edwardfkl`, `WatsonFungHK`).
+
+| Member | Student ID | Primary responsibility |
+|--------|------------|------------------------|
+| **Ka Lun Fan (Edward)** | 26145375 | Full-stack development — storefront SPA, REST API, data model, auth, checkout, admin back office, README and submission packaging |
+| **Ching Wa Fung (Watson)** | 25214913 | Live catalogue search (storefront + admin lists), related API/query support, and PHPUnit feature/unit tests |
+
+### Files and areas by member
+
+**Ka Lun Fan (Edward)** — core application and documentation:
+
+- **Frontend:** `frontend/app/` (home, login, register, account, checkout), `frontend/components/` (`CartPanel`, `ShopHeader`, `LanguageMenu`, `UserAvatarMenu`), `frontend/contexts/`, `frontend/hooks/useCart.ts`, most of `frontend/lib/` (`api.ts`, `authApi.ts`, `profileApi.ts`, `paymentInstructions.ts`, …), `frontend/messages/*.json`
+- **Backend API:** `backend/app/Http/Controllers/Api/` (cart, checkout, auth, profile, orders, promo preview, reviews, locale), `backend/app/Http/Middleware/` (`AuthenticateJwt`, `EnsureUserIsAdmin`), `backend/routes/api.php`
+- **Admin (Blade):** `backend/app/Http/Controllers/Admin/`, `backend/resources/views/admin/` (dashboard, users, products, orders, promo codes, order-item edits), `backend/lang/*/admin.php`
+- **Domain layer:** `backend/app/Models/`, migrations/seeders under `backend/database/`, `backend/app/Support/` (JWT, promo helpers, admin list helpers)
+- **Project docs & data:** `README.md`, `database/database_export.sql`, `database/products_seed.json`
+
+**Ching Wa Fung (Watson)** — search and automated tests:
+
+- **Storefront live search:** debounced product search on `frontend/app/page.tsx`; `GET /api/products?q=…` usage via `frontend/lib/api.ts` and `backend/app/Http/Controllers/Api/ProductController.php`
+- **Admin live search:** `backend/resources/views/admin/partials/live-search-script.blade.php` and list pages that include it (`admin/products`, `admin/orders`, `admin/users`, `admin/promo_codes` index views)
+- **Shared touch points (with Edward):** `frontend/lib/types.ts`, i18n strings in `frontend/messages/*.json`, and `backend/app/Http/Controllers/Admin/OrderController.php` (order list filters used for assignment marking)
+- **Tests:** `backend/tests/Feature/` and `backend/tests/Unit/` (auth, cart/checkout, admin CRUD, promo logic, locale/products API, guardrails, bulk actions)
+
+### Balance of effort
+
+Edward owns the end-to-end vertical slice (SPA + API + admin + persistence). Watson focused on **search UX across storefront and admin** and **test coverage** so regression checks do not depend on manual clicking alone. Either member can explain the full demo flow; Watson is expected to answer questions on search behaviour and the PHPUnit suite.
+
 ## How to run locally
 
 ### Prerequisites
