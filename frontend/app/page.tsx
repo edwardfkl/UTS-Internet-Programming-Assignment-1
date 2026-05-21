@@ -150,9 +150,21 @@ export default function Home() {
                       ) : null}
                     </div>
                     <div className="mt-auto flex flex-wrap items-end justify-between gap-3">
-                      <p className="text-lg font-semibold tabular-nums text-amber-900">
-                        {money.format(parsePrice(p))}
-                      </p>
+                      <div>
+                        <p className="text-lg font-semibold tabular-nums text-amber-900">
+                          {money.format(parsePrice(p))}
+                        </p>
+                        {(qtyByProduct[p.id] ?? 1) > 1 ? (
+                          <p className="mt-0.5 text-xs tabular-nums text-stone-600">
+                            × {qtyByProduct[p.id]} ={" "}
+                            <span className="font-medium text-stone-800">
+                              {money.format(
+                                parsePrice(p) * (qtyByProduct[p.id] ?? 1),
+                              )}
+                            </span>
+                          </p>
+                        ) : null}
+                      </div>
                       <p className="text-xs text-stone-500">
                         {tf("common.inStock", { count: p.stock })}
                       </p>

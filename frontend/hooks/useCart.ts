@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   addCartItem,
   deleteCartItem,
@@ -9,7 +9,10 @@ import {
   resetCartSession,
   updateCartItem,
 } from "@/lib/api";
+import { parsePrice } from "@/lib/money";
 import type { CartLine } from "@/lib/types";
+
+const QTY_SYNC_DEBOUNCE_MS = 280;
 
 export function useCart() {
   const [cartLines, setCartLines] = useState<CartLine[]>([]);
@@ -19,6 +22,9 @@ export function useCart() {
   const [busyId, setBusyId] = useState<number | null>(null);
   const [cartToken, setCartToken] = useState<string | null>(null);
   const [cartStatus, setCartStatus] = useState<string>("cart");
+  const pendingSyncRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(
+    new Map(),
+  );
 
   const refreshCart = useCallback(async () => {
     const token = await ensureCartToken();
@@ -59,6 +65,14 @@ export function useCart() {
     };
   }, [refreshCart]);
 
+  useEffect(() => {
+    const pending = pendingSyncRef.current;
+    return () => {
+      pending.forEach((handle) => clearTimeout(handle));
+      pending.clear();
+    };
+  }, []);
+
   const handleAdd = useCallback(
     async (productId: number, quantity: number) => {
       setError(null);
@@ -77,19 +91,39 @@ export function useCart() {
   );
 
   const handleQtyChange = useCallback(
-    async (line: CartLine, nextQty: number) => {
-      if (nextQty < 1) return;
+    (line: CartLine, nextQty: number) => {
+      const clamped = Math.max(1, Math.min(nextQty, line.product.stock));
       setError(null);
-      const token = await ensureCartToken();
-      setBusyId(line.id);
-      try {
-        await updateCartItem(token, line.id, nextQty);
-        await refreshCart();
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Update failed");
-      } finally {
-        setBusyId(null);
-      }
+
+      const unit = parsePrice(line.product);
+      setCartLines((ls) =>
+        ls.map((l) =>
+          l.id === line.id
+            ? { ...l, quantity: clamped, line_total: unit * clamped }
+            : l,
+        ),
+      );
+      setCartTotal((t) => t - line.line_total + unit * clamped);
+
+      const existing = pendingSyncRef.current.get(line.id);
+      if (existing) clearTimeout(existing);
+
+      const handle = setTimeout(async () => {
+        pendingSyncRef.current.delete(line.id);
+        try {
+          const token = await ensureCartToken();
+          await updateCartItem(token, line.id, clamped);
+          await refreshCart();
+        } catch (e) {
+          setError(e instanceof Error ? e.message : "Update failed");
+          try {
+            await refreshCart();
+          } catch {
+            /* keep showing the original error */
+          }
+        }
+      }, QTY_SYNC_DEBOUNCE_MS);
+      pendingSyncRef.current.set(line.id, handle);
     },
     [refreshCart],
   );

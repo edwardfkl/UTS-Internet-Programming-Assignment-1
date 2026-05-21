@@ -285,6 +285,14 @@ export default function ProductPage() {
                   <p className="mt-4 text-2xl font-semibold tabular-nums text-amber-900">
                     {money.format(parsePrice(product))}
                   </p>
+                  {qty > 1 ? (
+                    <p className="mt-1 text-sm tabular-nums text-stone-600">
+                      × {qty} ={" "}
+                      <span className="font-medium text-stone-800">
+                        {money.format(parsePrice(product) * qty)}
+                      </span>
+                    </p>
+                  ) : null}
                   <p className="mt-2 text-sm text-stone-600">
                     {tf("common.inStock", { count: product.stock })}
                   </p>

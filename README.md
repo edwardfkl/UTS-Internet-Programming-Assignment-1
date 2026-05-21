@@ -2,6 +2,40 @@
 
 **Next.js (TypeScript)** frontend, **Laravel (PHP)** REST API, and **MySQL** persistence (SQLite remains optional via `.env`). The storefront and cart update on one page via `fetch` without full page reloads.
 
+## What this app is, and what problem it solves
+
+**Edward's Online Store** is a minimal but production-shaped e‑commerce storefront aimed at small Australian retailers (a cafe, studio, boutique, or single-brand workshop) who want to sell a focused catalogue — roughly 10–200 SKUs — online with their own URL, their own checkout copy, and without paying SaaS-tier fees per month.
+
+### The business problem
+
+Independent retailers today are squeezed between three unappealing options:
+
+| Option | Pain |
+|--------|------|
+| **Heavy SaaS platforms** (Shopify, BigCommerce) | $30+/month per store, transaction fees, and limited control over the checkout flow or the post-order payment instructions. |
+| **Generic CMS plugins** (WooCommerce on WordPress) | Cheap up front, but the merchant ends up babysitting WordPress core, themes, plugin updates, and PHP versions. |
+| **Building from scratch** | Full control, but most teams stall on the “boring” parts — cart persistence, guest → registered user identity, an admin back office, and order state. |
+
+This project takes the third path and packages the non-trivial parts so a single-store owner (or a developer building for one) gets a working vertical slice on day one.
+
+### What the app actually does for the shop owner
+
+| Capability | Why it matters to the business |
+|-----------|--------------------------------|
+| **Guest cart that survives login and device switch** (UUID `X-Cart-Token` + “open cart on another device” link) | Shoppers rarely register before adding to cart; losing the cart loses the sale. |
+| **Order = draft cart in the same `orders` table** | One source of truth; no reconciliation between a `carts` table and an `orders` table when the customer pays. |
+| **Admin can edit any line of any order** (product, quantity, unit price) | Phone/email corrections (“can you swap the size?”, “add one more”) without SQL. |
+| **Promo codes with type, amount, time window and minimum spend** | Run a weekend sale or a referral discount without code changes. |
+| **Australian-friendly payment instructions** (ATM transfer / PayID / BPAY placeholders) | These are the bank-transfer rails that small AU shops actually use, and that Shopify does not natively support without a paid app. |
+| **Multi-language storefront** (English / 繁體中文 / 日本語 / 한국어) and admin | Tourist-heavy CBD shops can serve overseas customers without a second website. |
+| **Token auth for the SPA + cookie session for the admin back office** | Same database user, two appropriate auth modes; the admin link in the user menu silently bridges the two. |
+| **Status pipeline on orders** (`cart` → `pending_payment` → `paid` → `shipped` → `completed`/`cancelled`) | Mirrors how the shop actually fulfills an order, so staff and customer history both make sense. |
+| **Bulk admin actions, sortable columns, live search, status filters** | One admin can run a small shop without drowning in clicks. |
+
+### Who it is **not** for
+
+A multi-store chain, marketplace with multiple sellers, or a business that needs warehouse / shipping integrations out of the box. Those workloads are better served by the SaaS platforms above; this codebase is intentionally a small, owned, single-tenant vertical slice.
+
 ## How to run locally
 
 ### Prerequisites

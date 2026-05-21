@@ -117,25 +117,31 @@ export function CartPanel({
                       <button
                         type="button"
                         className="px-2 py-1 text-sm disabled:opacity-40"
-                        disabled={
-                          !cartEditable ||
-                          busyId === line.id ||
-                          line.quantity <= 1
-                        }
+                        disabled={!cartEditable || line.quantity <= 1}
                         onClick={() => onQtyChange(line, line.quantity - 1)}
                         aria-label={t("cart.decreaseQty")}
                       >
                         −
                       </button>
-                      <span className="min-w-8 px-1 text-center text-sm tabular-nums">
-                        {line.quantity}
-                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        max={line.product.stock}
+                        value={line.quantity}
+                        disabled={!cartEditable}
+                        onChange={(ev) => {
+                          const v = Number(ev.target.value);
+                          if (!Number.isFinite(v)) return;
+                          onQtyChange(line, Math.max(1, Math.trunc(v)));
+                        }}
+                        aria-label={t("cart.qty")}
+                        className="w-12 bg-transparent px-1 py-1 text-center text-sm tabular-nums outline-none focus:bg-white"
+                      />
                       <button
                         type="button"
                         className="px-2 py-1 text-sm disabled:opacity-40"
                         disabled={
                           !cartEditable ||
-                          busyId === line.id ||
                           line.quantity >= line.product.stock
                         }
                         onClick={() => onQtyChange(line, line.quantity + 1)}
