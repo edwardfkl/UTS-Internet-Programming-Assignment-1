@@ -260,14 +260,14 @@ I have been working as a software engineer for about five years, with most of th
 
 ## Database export (backup)
 
-A committed snapshot for submission is at **`database/database_export.sql`** (SQLite-format SQL from `php artisan migrate:fresh --seed`, then trimmed to demo-only rows: default admin user plus seeded products). Markers can inspect schema and seed data directly; to load into SQLite, point `DB_DATABASE` at a file and run `sqlite3 your.db < database/database_export.sql` (or import via your SQL client).
+A committed snapshot for submission is at **`database/database_export.sql`** (SQLite-format SQL from `php artisan migrate:fresh --seed` on SQLite: full current schema, demo admin user, 17 seeded products, demo promo codes `WELCOME10` / `SAVE20`, no orders). Markers can inspect schema and seed data directly; to load into SQLite, point `DB_DATABASE` at a file and run `sqlite3 your.db < database/database_export.sql` (or import via your SQL client).
 
 To snapshot your own environment (e.g. MySQL in production):
 
 - **MySQL**: `mysqldump -u USER -p studio_supply > database_export.sql`
 - **SQLite**: `sqlite3 backend/database/database.sqlite .dump > database_export.sql`
 
-`database/products_seed.json` lists the seeded products for reference or manual import.
+`database/products_seed.json` lists all 17 seeded products (with `status: active`) for reference or manual import — keep in sync with `backend/database/seeders/ProductSeeder.php`.
 
 ## API reference
 
