@@ -67,6 +67,42 @@ export async function ensureCartToken(): Promise<string> {
   return createCartSession();
 }
 
+function isStaleCartResponse(status: number): boolean {
+  return status === 404 || status === 401 || status === 403;
+}
+
+function cartRequestHeaders(token: string): Record<string, string> {
+  return {
+    Accept: "application/json",
+    ...bearerHeaders(),
+    "X-Cart-Token": token,
+  };
+}
+
+/** Cart API call; replaces invalid/deleted cart token once and retries. */
+async function fetchCartApi(
+  token: string,
+  path: string,
+  init: RequestInit = {},
+): Promise<Response> {
+  const url = `${apiBase().replace(/\/$/, "")}${path}`;
+  const request = (cartToken: string) =>
+    fetch(url, {
+      ...init,
+      headers: {
+        ...cartRequestHeaders(cartToken),
+        ...(init.headers as Record<string, string> | undefined),
+      },
+    });
+
+  let res = await request(token);
+  if (isStaleCartResponse(res.status)) {
+    await createCartSession();
+    res = await request(getStoredCartToken()!);
+  }
+  return res;
+}
+
 export async function fetchProducts(search?: string): Promise<Product[]> {
   const q = search?.trim();
   const url = new URL(`${apiBase().replace(/\/$/, "")}/api/products`);
@@ -96,18 +132,7 @@ export async function fetchProduct(id: number): Promise<Product> {
 }
 
 export async function fetchCart(token: string): Promise<CartResponse> {
-  const res = await fetch(`${apiBase()}/api/cart`, {
-    headers: {
-      Accept: "application/json",
-      ...bearerHeaders(),
-      "X-Cart-Token": token,
-    },
-    cache: "no-store",
-  });
-  if (res.status === 404 || res.status === 401 || res.status === 403) {
-    await createCartSession();
-    return fetchCart(getStoredCartToken()!);
-  }
+  const res = await fetchCartApi(token, "/api/cart", { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`Could not load cart (HTTP ${res.status})`);
   }
@@ -126,14 +151,9 @@ export async function placeOrder(
   saveToProfile: boolean,
   promoCode?: string | null,
 ): Promise<CheckoutResult> {
-  const res = await fetch(`${apiBase()}/api/checkout`, {
+  const res = await fetchCartApi(token, "/api/checkout", {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...bearerHeaders(),
-      "X-Cart-Token": token,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       payment_method: paymentMethod,
       promo_code: promoCode?.trim() ? promoCode.trim() : null,
@@ -171,14 +191,9 @@ export async function addCartItem(
   productId: number,
   quantity: number,
 ): Promise<void> {
-  const res = await fetch(`${apiBase()}/api/cart/items`, {
+  const res = await fetchCartApi(token, "/api/cart/items", {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...bearerHeaders(),
-      "X-Cart-Token": token,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ product_id: productId, quantity }),
   });
   if (!res.ok) {
@@ -199,14 +214,9 @@ export async function updateCartItem(
   cartItemId: number,
   quantity: number,
 ): Promise<void> {
-  const res = await fetch(`${apiBase()}/api/cart/items/${cartItemId}`, {
+  const res = await fetchCartApi(token, `/api/cart/items/${cartItemId}`, {
     method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...bearerHeaders(),
-      "X-Cart-Token": token,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ quantity }),
   });
   if (!res.ok) {
@@ -222,13 +232,8 @@ export async function updateCartItem(
 }
 
 export async function deleteCartItem(token: string, cartItemId: number): Promise<void> {
-  const res = await fetch(`${apiBase()}/api/cart/items/${cartItemId}`, {
+  const res = await fetchCartApi(token, `/api/cart/items/${cartItemId}`, {
     method: "DELETE",
-    headers: {
-      Accept: "application/json",
-      ...bearerHeaders(),
-      "X-Cart-Token": token,
-    },
   });
   if (!res.ok && res.status !== 204) {
     throw new Error(`Could not remove item (HTTP ${res.status})`);
