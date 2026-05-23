@@ -66,6 +66,7 @@ return [
         'title' => '用戶',
         'heading' => '用戶',
         'intro' => '已註冊嘅網店帳戶。',
+        'add' => '新增用戶',
         'col_id' => '編號',
         'col_name' => '姓名',
         'col_email' => '電郵',
@@ -91,6 +92,14 @@ return [
             'deleted' => '已刪除 :count 個用戶。',
             'status_updated' => '已將 :count 個用戶狀態改為「:status」。',
             'skipped' => '已略過：:list。',
+        ],
+
+        'create' => [
+            'meta_title' => '新增用戶',
+            'heading' => '新增用戶',
+            'back' => '← 返用戶列表',
+            'password' => '密碼',
+            'password_hint' => '至少 8 個字元。',
         ],
 
         'edit' => [
@@ -181,6 +190,7 @@ return [
         'title' => '訂單',
         'heading' => '訂單',
         'intro' => '暫存（未埋單）同已落單訂單（同一 orders 資料表）。',
+        'add' => '新增訂單',
         'filter_status' => '狀態篩選',
         'filter_status_all' => '全部',
         'filter_status_cart' => '只顯示暫存購物車',
@@ -235,6 +245,19 @@ return [
             'col_actions' => '操作',
             'subtotal' => '小計',
             'edit_link' => '編輯',
+        ],
+
+        'create' => [
+            'meta_title' => '新增訂單',
+            'heading' => '新增訂單',
+            'back' => '← 返訂單列表',
+            'intro' => '建立電話或人手訂單。狀態唔係「暫存」或「已取消」時會扣減庫存。',
+            'status_hint' => '暫存唔扣庫存；待付款及之後狀態會預留庫存。',
+            'placed_at_hint' => '已落單狀態可留空，會用而家時間。',
+            'promo_code' => '優惠碼（選填）',
+            'line_items' => '訂單明細',
+            'line_items_hint' => '單價以儲存時商品目錄為準。',
+            'product_placeholder' => '揀商品…',
         ],
 
         'edit' => [

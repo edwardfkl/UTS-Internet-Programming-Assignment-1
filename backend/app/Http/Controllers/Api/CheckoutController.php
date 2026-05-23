@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Support\OrderStock;
 use App\Support\PromoCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -111,6 +112,8 @@ class CheckoutController extends Controller
         $order->shipping_postcode = $data['shipping_postcode'];
         $order->shipping_country = $data['shipping_country'];
         $order->save();
+
+        app(OrderStock::class)->reserve($order);
 
         if (! empty($data['save_to_profile'])) {
             $user->fill([

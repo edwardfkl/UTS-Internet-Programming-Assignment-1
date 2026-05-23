@@ -66,6 +66,7 @@ return [
         'title' => '사용자',
         'heading' => '사용자',
         'intro' => '등록된 스토어 계정입니다.',
+        'add' => '사용자 추가',
         'col_id' => 'ID',
         'col_name' => '이름',
         'col_email' => '이메일',
@@ -91,6 +92,14 @@ return [
             'deleted' => ':count명의 사용자를 삭제했습니다.',
             'status_updated' => ':count명의 사용자 상태를 ":status"(으)로 변경했습니다.',
             'skipped' => '건너뜀: :list.',
+        ],
+
+        'create' => [
+            'meta_title' => '새 사용자',
+            'heading' => '새 사용자',
+            'back' => '← 사용자 목록',
+            'password' => '비밀번호',
+            'password_hint' => '최소 8자.',
         ],
 
         'edit' => [
@@ -181,6 +190,7 @@ return [
         'title' => '주문',
         'heading' => '주문',
         'intro' => '임시 장바구니와 확정 주문(동일한 orders 테이블).',
+        'add' => '주문 추가',
         'filter_status' => '상태',
         'filter_status_all' => '전체',
         'filter_status_cart' => '임시 장바구니만',
@@ -235,6 +245,19 @@ return [
             'col_actions' => '작업',
             'subtotal' => '소계',
             'edit_link' => '편집',
+        ],
+
+        'create' => [
+            'meta_title' => '새 주문',
+            'heading' => '새 주문',
+            'back' => '← 주문 목록',
+            'intro' => '전화·수동 주문을 만듭니다. 임시 장바구니·취소가 아닌 상태에서는 재고가 차감됩니다.',
+            'status_hint' => '임시 장바구니는 재고를 차감하지 않습니다. 결제 대기 이후는 재고를 확보합니다.',
+            'placed_at_hint' => '확정 주문에서 비우면 현재 시각을 사용합니다.',
+            'promo_code' => '프로모 코드(선택)',
+            'line_items' => '품목',
+            'line_items_hint' => '단가는 저장 시점의 카탈로그 가격입니다.',
+            'product_placeholder' => '상품 선택…',
         ],
 
         'edit' => [

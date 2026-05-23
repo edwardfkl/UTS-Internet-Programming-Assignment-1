@@ -25,11 +25,11 @@ Route::prefix('admin')
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
             Route::post('users/bulk', [UserController::class, 'bulk'])->name('users.bulk');
-            Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
+            Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
             Route::post('products/bulk', [ProductController::class, 'bulk'])->name('products.bulk');
             Route::resource('products', ProductController::class)->except(['show']);
             Route::post('orders/bulk', [OrderController::class, 'bulk'])->name('orders.bulk');
-            Route::resource('orders', OrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+            Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
             Route::post('promo-codes/bulk', [PromoCodeController::class, 'bulk'])->name('promo-codes.bulk');
             Route::resource('promo-codes', PromoCodeController::class)
                 ->parameters(['promo-codes' => 'promoCode'])

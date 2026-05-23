@@ -5,16 +5,18 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { CartPanel } from "@/components/CartPanel";
 import { ShopHeader } from "@/components/ShopHeader";
+import { useCurrency } from "@/contexts/currency-context";
 import { useLocale } from "@/contexts/locale-context";
 import { useCart } from "@/hooks/useCart";
 import { fetchProducts } from "@/lib/api";
-import { money, parsePrice } from "@/lib/money";
+import { parsePrice } from "@/lib/money";
 import type { Product } from "@/lib/types";
 
 const SEARCH_DEBOUNCE_MS = 280;
 
 export default function Home() {
   const { t, tf } = useLocale();
+  const { formatMoney } = useCurrency();
   const [products, setProducts] = useState<Product[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [catalogError, setCatalogError] = useState<string | null>(null);
@@ -152,13 +154,13 @@ export default function Home() {
                     <div className="mt-auto flex flex-wrap items-end justify-between gap-3">
                       <div>
                         <p className="text-lg font-semibold tabular-nums text-amber-900">
-                          {money.format(parsePrice(p))}
+                          {formatMoney(parsePrice(p))}
                         </p>
                         {(qtyByProduct[p.id] ?? 1) > 1 ? (
                           <p className="mt-0.5 text-xs tabular-nums text-stone-600">
                             × {qtyByProduct[p.id]} ={" "}
                             <span className="font-medium text-stone-800">
-                              {money.format(
+                              {formatMoney(
                                 parsePrice(p) * (qtyByProduct[p.id] ?? 1),
                               )}
                             </span>

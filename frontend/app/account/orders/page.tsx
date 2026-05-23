@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShopHeader } from "@/components/ShopHeader";
 import { useAuth } from "@/contexts/auth-context";
+import { useCurrency } from "@/contexts/currency-context";
 import { useLocale } from "@/contexts/locale-context";
 import { fetchUserOrders } from "@/lib/api";
-import { money } from "@/lib/money";
 import type { OrderStatus, UserOrderSummary } from "@/lib/types";
 
 const STATUS_BADGE: Record<OrderStatus, string> = {
@@ -22,6 +22,7 @@ const STATUS_BADGE: Record<OrderStatus, string> = {
 export default function AccountOrdersPage() {
   const router = useRouter();
   const { t, tf } = useLocale();
+  const { formatMoney } = useCurrency();
   const { user, ready: authReady } = useAuth();
 
   const [orders, setOrders] = useState<UserOrderSummary[] | null>(null);
@@ -147,7 +148,7 @@ export default function AccountOrdersPage() {
                         : "—"}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-stone-900">
-                      {money.format(order.total_amount)}
+                      {formatMoney(order.total_amount)}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <span

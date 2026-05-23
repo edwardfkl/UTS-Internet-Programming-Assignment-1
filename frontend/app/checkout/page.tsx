@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShopHeader } from "@/components/ShopHeader";
 import { useAuth } from "@/contexts/auth-context";
+import { useCurrency } from "@/contexts/currency-context";
 import { useLocale } from "@/contexts/locale-context";
 import { useCart } from "@/hooks/useCart";
 import {
@@ -12,7 +13,7 @@ import {
   previewPromoCode,
   resetCartSession,
 } from "@/lib/api";
-import { money } from "@/lib/money";
+import { formatMoney as formatMoneyIn } from "@/lib/money";
 import {
   PAYMENT_OPTIONS,
   paymentDetailBlocks,
@@ -23,6 +24,7 @@ import type { CheckoutResult, PaymentMethod, ShippingForm } from "@/lib/types";
 export default function CheckoutPage() {
   const router = useRouter();
   const { t, tf } = useLocale();
+  const { currency, formatMoney } = useCurrency();
   const { user, ready: authReady } = useAuth();
   const {
     cartLines,
@@ -207,7 +209,7 @@ export default function CheckoutPage() {
     const blocks = paymentDetailBlocks(
       done.payment_method,
       done.order_reference,
-      money.format(done.total_amount),
+      formatMoney(done.total_amount),
       t
     );
     const s = done.shipping;
@@ -262,14 +264,14 @@ export default function CheckoutPage() {
                   {line.name} × {line.quantity}
                 </span>
                 <span className="tabular-nums">
-                  {money.format(line.line_total)}
+                  {formatMoney(line.line_total)}
                 </span>
               </li>
             ))}
             <li className="flex justify-between border-t border-stone-200 pt-3 text-stone-700">
               <span>{t("checkout.subtotal")}</span>
               <span className="tabular-nums">
-                {money.format(done.subtotal_amount)}
+                {formatMoney(done.subtotal_amount)}
               </span>
             </li>
             {done.discount_amount > 0 ? (
@@ -283,14 +285,14 @@ export default function CheckoutPage() {
                   ) : null}
                 </span>
                 <span className="tabular-nums">
-                  −{money.format(done.discount_amount)}
+                  −{formatMoney(done.discount_amount)}
                 </span>
               </li>
             ) : null}
             <li className="flex justify-between border-t border-stone-200 pt-3 font-medium text-stone-900">
               <span>{t("checkout.totalDue")}</span>
               <span className="tabular-nums">
-                {money.format(done.total_amount)}
+                {formatMoney(done.total_amount)}
               </span>
             </li>
           </ul>
@@ -398,7 +400,7 @@ export default function CheckoutPage() {
                       {line.product.name} × {line.quantity}
                     </span>
                     <span className="tabular-nums text-stone-900">
-                      {money.format(line.line_total)}
+                      {formatMoney(line.line_total)}
                     </span>
                   </li>
                 ))}
@@ -407,7 +409,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between">
                   <span>{t("checkout.subtotal")}</span>
                   <span className="tabular-nums">
-                    {money.format(cartTotal)}
+                    {formatMoney(cartTotal)}
                   </span>
                 </div>
                 {appliedPromo ? (
@@ -419,16 +421,26 @@ export default function CheckoutPage() {
                       </span>
                     </span>
                     <span className="tabular-nums">
-                      −{money.format(discount)}
+                      −{formatMoney(discount)}
                     </span>
                   </div>
                 ) : null}
                 <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-semibold text-stone-900">
                   <span>{t("common.total")}</span>
                   <span className="tabular-nums">
-                    {money.format(totalAfterDiscount)}
+                    {formatMoney(totalAfterDiscount)}
                   </span>
                 </div>
+                {currency !== "HKD" ? (
+                  <p className="rounded-lg bg-stone-50 px-3 py-2 text-xs text-stone-600">
+                    {tf("checkout.currencyDisplayNote", { currency })}
+                    <span className="mt-1 block tabular-nums text-stone-800">
+                      {tf("checkout.chargedInHkd", {
+                        amount: formatMoneyIn(totalAfterDiscount, "HKD"),
+                      })}
+                    </span>
+                  </p>
+                ) : null}
               </div>
             </section>
 
@@ -606,7 +618,7 @@ export default function CheckoutPage() {
                     {t("checkout.promo.applied")}{" "}
                     <span className="font-mono">{appliedPromo.code}</span>{" "}
                     <span className="font-medium">
-                      −{money.format(appliedPromo.discount)}
+                      −{formatMoney(appliedPromo.discount)}
                     </span>
                   </span>
                   <button

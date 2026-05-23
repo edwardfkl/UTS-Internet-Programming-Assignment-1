@@ -32,7 +32,8 @@
     "noImage": "無圖片",
     "inStock": "庫存 {count} 件",
     "phoneLabel": "電話：",
-    "openLanguageMenu": "語言"
+    "openLanguageMenu": "語言",
+    "openCurrencyMenu": "貨幣"
   },
   "nav": {
     "logIn": "登入",
@@ -135,6 +136,8 @@
     "signedInDelivery": "你已以 {email} 登入。請先填寫收件資料。",
     "editProfileLink": "編輯已儲存的個人資料與地址",
     "orderSummary": "訂單摘要",
+    "currencyDisplayNote": "價格以 {currency} 顯示。實際結帳金額以 HKD 計算。",
+    "chargedInHkd": "HKD 應付：{amount}",
     "subtotal": "小計",
     "discount": "折扣",
     "deliveryAddress": "收件地址",
@@ -244,5 +247,8 @@
   },
   "lang": {
     "title": "語言"
+  },
+  "currency": {
+    "title": "貨幣"
   }
 }

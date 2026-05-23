@@ -43,6 +43,7 @@ class Order extends Model
         'user_id',
         'token',
         'status',
+        'stock_reserved',
         'payment_method',
         'promo_code',
         'discount_amount',
@@ -62,6 +63,7 @@ class Order extends Model
     protected function casts(): array
     {
         return [
+            'stock_reserved' => 'boolean',
             'placed_at' => 'datetime',
             'discount_amount' => 'decimal:2',
             'subtotal_amount' => 'decimal:2',

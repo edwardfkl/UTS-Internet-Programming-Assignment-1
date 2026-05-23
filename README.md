@@ -124,7 +124,7 @@ Session-based UI on the same app as the API (separate from the Next.js storefron
 - **URL:** `http://127.0.0.1:8000/admin/login` (or `/admin` after login).
 - **Access:** only users with `is_admin = true` (see migration `add_is_admin_to_users_table`).
 - **Demo account** (created by `AdminUserSeeder` when you run `--seed`): **email** `admin@example.com`, **password** `password` — change in production.
-- **Features:** dashboard counts; **Users** (list, edit, admin flag, optional password reset, delete with safeguards); **Products** (full CRUD; delete blocked if the product appears on non-cart orders); **Orders** (list + detail with line items and shipping snapshot).
+- **Features:** dashboard counts; **Users** (list, create, edit, admin flag, optional password reset, delete with safeguards); **Products** (full CRUD; delete blocked if the product appears on non-cart orders); **Orders** (list, create with line items, detail, edit status/shipping; stock is deducted when an order leaves `cart`/`cancelled`, restored on cancel or delete; checkout API uses the same rules).
 
 The SPA uses **Sanctum API tokens**; the admin uses the **`web` guard** and cookies. The same database user can use both: after you log in to the shop as an admin, the app calls **`POST /api/admin/web-session`** (with `credentials: "include"`) to create a matching session so **Admin panel** opens logged in.
 

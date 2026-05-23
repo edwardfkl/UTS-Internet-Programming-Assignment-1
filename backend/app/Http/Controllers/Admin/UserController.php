@@ -13,6 +13,45 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    public function create(): View
+    {
+        return view('admin.users.create', [
+            'statuses' => User::STATUSES,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        if ($request->input('avatar_url') === '') {
+            $request->merge(['avatar_url' => null]);
+        }
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'is_admin' => ['sometimes', 'boolean'],
+            'status' => ['required', Rule::in(User::STATUSES)],
+            'avatar_url' => ['nullable', 'string', 'max:2048', 'url'],
+            'phone' => ['nullable', 'string', 'max:64'],
+            'shipping_recipient_name' => ['nullable', 'string', 'max:255'],
+            'shipping_line1' => ['nullable', 'string', 'max:255'],
+            'shipping_line2' => ['nullable', 'string', 'max:255'],
+            'shipping_city' => ['nullable', 'string', 'max:120'],
+            'shipping_state' => ['nullable', 'string', 'max:80'],
+            'shipping_postcode' => ['nullable', 'string', 'max:32'],
+            'shipping_country' => ['nullable', 'string', 'max:120'],
+        ]);
+
+        $data = $this->normaliseOptionalUserFields($data);
+        $data['password'] = Hash::make($data['password']);
+        $data['is_admin'] = $request->boolean('is_admin');
+
+        User::query()->create($data);
+
+        return redirect()->route('admin.users.index')->with('success', 'User created.');
+    }
+
     public function index(Request $request): View
     {
         $q = AdminListRequest::search($request);
@@ -86,22 +125,7 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
-        foreach (
-            [
-                'phone',
-                'shipping_recipient_name',
-                'shipping_line1',
-                'shipping_line2',
-                'shipping_city',
-                'shipping_state',
-                'shipping_postcode',
-                'shipping_country',
-            ] as $key
-        ) {
-            if (($data[$key] ?? '') === '') {
-                $data[$key] = null;
-            }
-        }
+        $data = $this->normaliseOptionalUserFields($data);
 
         $wasAdmin = $user->is_admin;
         $user->name = $data['name'];
@@ -213,5 +237,31 @@ class UserController extends Controller
         return redirect()
             ->route('admin.users.index', $request->only(['q', 'status', 'sort', 'dir', 'page']))
             ->with('success', __('admin.users.bulk.status_updated', ['count' => $applied, 'status' => $status]).(empty($skipped) ? '' : ' '.__('admin.users.bulk.skipped', ['list' => implode(', ', $skipped)])));
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function normaliseOptionalUserFields(array $data): array
+    {
+        foreach (
+            [
+                'phone',
+                'shipping_recipient_name',
+                'shipping_line1',
+                'shipping_line2',
+                'shipping_city',
+                'shipping_state',
+                'shipping_postcode',
+                'shipping_country',
+            ] as $key
+        ) {
+            if (($data[$key] ?? '') === '') {
+                $data[$key] = null;
+            }
+        }
+
+        return $data;
     }
 }

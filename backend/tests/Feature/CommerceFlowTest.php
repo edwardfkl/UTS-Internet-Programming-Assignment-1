@@ -104,5 +104,7 @@ class CommerceFlowTest extends TestCase
         $this->assertSame($user->id, $order->user_id);
         $this->assertNotNull($order->placed_at);
         $this->assertSame('Test Recipient', $user->shipping_recipient_name);
+        $this->assertTrue($order->stock_reserved);
+        $this->assertSame(8, $product->fresh()->stock);
     }
 }

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { money, parsePrice } from "@/lib/money";
+import {
+  convertFromHkd,
+  createMoneyFormatter,
+  formatMoney,
+  parsePrice,
+} from "@/lib/money";
 
 describe("parsePrice", () => {
   it("parses decimal strings from API shape", () => {
@@ -7,9 +12,18 @@ describe("parsePrice", () => {
   });
 });
 
-describe("money", () => {
-  it("formats as HKD", () => {
-    expect(money.format(99.9)).toMatch(/99/);
-    expect(money.format(99.9)).toMatch(/HK/);
+describe("formatMoney", () => {
+  it("formats HKD by default", () => {
+    expect(formatMoney(99.9)).toMatch(/99/);
+    expect(formatMoney(99.9)).toMatch(/HK/);
+  });
+
+  it("converts from HKD base for other currencies", () => {
+    expect(convertFromHkd(100, "USD")).toBeCloseTo(12.8);
+    expect(formatMoney(100, "USD")).toMatch(/12\.8/);
+  });
+
+  it("creates locale-aware formatters", () => {
+    expect(createMoneyFormatter("JPY").format(1950)).toMatch(/1,950|1950/);
   });
 });

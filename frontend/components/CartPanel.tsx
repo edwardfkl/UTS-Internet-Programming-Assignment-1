@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
+import { useCurrency } from "@/contexts/currency-context";
 import { useLocale } from "@/contexts/locale-context";
-import { money, parsePrice } from "@/lib/money";
+import { parsePrice } from "@/lib/money";
 import type { CartLine } from "@/lib/types";
 
 type CartPanelProps = {
@@ -33,6 +34,7 @@ export function CartPanel({
   onRemove,
 }: CartPanelProps) {
   const { t } = useLocale();
+  const { formatMoney } = useCurrency();
   const { user, ready: authReady } = useAuth();
   const cartEditable = cartStatus === "cart";
   const needsLogin = authReady && !user;
@@ -109,7 +111,7 @@ export function CartPanel({
                     {line.product.name}
                   </Link>
                   <p className="text-xs text-stone-500 tabular-nums">
-                    @ {money.format(parsePrice(line.product))}
+                    @ {formatMoney(parsePrice(line.product))}
                   </p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="text-xs text-stone-500">{t("cart.qty")}</span>
@@ -161,7 +163,7 @@ export function CartPanel({
                   </div>
                 </div>
                 <p className="shrink-0 text-sm font-semibold tabular-nums text-stone-800">
-                  {money.format(line.line_total)}
+                  {formatMoney(line.line_total)}
                 </p>
               </li>
             ))}
@@ -171,7 +173,7 @@ export function CartPanel({
           <div className="mt-4 flex items-center justify-between border-t border-stone-200 pt-4">
             <span className="text-sm font-medium text-stone-600">{t("common.total")}</span>
             <span className="font-display text-xl font-semibold tabular-nums text-amber-950">
-              {money.format(total)}
+              {formatMoney(total)}
             </span>
           </div>
         ) : null}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CurrencyMenu } from "@/components/CurrencyMenu";
 import { LanguageMenu } from "@/components/LanguageMenu";
 import { UserAvatarMenu } from "@/components/UserAvatarMenu";
 import { useAuth } from "@/contexts/auth-context";
@@ -31,6 +32,7 @@ export function ShopHeader({ tagline }: ShopHeaderProps) {
           <Link href="/" className="font-medium text-stone-800 hover:text-amber-900">
             {t("nav.catalog")}
           </Link>
+          <CurrencyMenu />
           <LanguageMenu />
           {ready && user ? (
             <>

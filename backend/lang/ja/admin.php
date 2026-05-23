@@ -66,6 +66,7 @@ return [
         'title' => 'ユーザー',
         'heading' => 'ユーザー',
         'intro' => '登録済みのストアアカウント。',
+        'add' => 'ユーザーを追加',
         'col_id' => 'ID',
         'col_name' => '名前',
         'col_email' => 'メール',
@@ -91,6 +92,14 @@ return [
             'deleted' => ':count 件のユーザーを削除しました。',
             'status_updated' => ':count 件のユーザーを「:status」に変更しました。',
             'skipped' => 'スキップ：:list。',
+        ],
+
+        'create' => [
+            'meta_title' => '新規ユーザー',
+            'heading' => '新規ユーザー',
+            'back' => '← ユーザー一覧へ',
+            'password' => 'パスワード',
+            'password_hint' => '8文字以上。',
         ],
 
         'edit' => [
@@ -181,6 +190,7 @@ return [
         'title' => '注文',
         'heading' => '注文',
         'intro' => 'ドラフトカートと確定注文（同じ orders テーブル）。',
+        'add' => '注文を追加',
         'filter_status' => 'ステータス',
         'filter_status_all' => 'すべて',
         'filter_status_cart' => 'ドラフトカートのみ',
@@ -235,6 +245,19 @@ return [
             'col_actions' => '操作',
             'subtotal' => '小計',
             'edit_link' => '編集',
+        ],
+
+        'create' => [
+            'meta_title' => '新規注文',
+            'heading' => '新規注文',
+            'back' => '← 注文一覧へ',
+            'intro' => '電話・手動注文を作成します。ドラフトカートとキャンセル以外のステータスで在庫を減らします。',
+            'status_hint' => 'ドラフトカートは在庫を減らしません。支払い待ち以降は在庫を確保します。',
+            'placed_at_hint' => '確定注文で空欄の場合は現在時刻を使います。',
+            'promo_code' => 'クーポンコード（任意）',
+            'line_items' => '明細',
+            'line_items_hint' => '単価は保存時のカタログ価格です。',
+            'product_placeholder' => '商品を選択…',
         ],
 
         'edit' => [

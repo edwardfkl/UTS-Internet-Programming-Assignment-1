@@ -32,7 +32,8 @@
     "noImage": "No image",
     "inStock": "{count} in stock",
     "phoneLabel": "Phone:",
-    "openLanguageMenu": "Language"
+    "openLanguageMenu": "Language",
+    "openCurrencyMenu": "Currency"
   },
   "nav": {
     "logIn": "Log in",
@@ -135,6 +136,8 @@
     "signedInDelivery": "You are signed in as {email}. Delivery details are required before payment.",
     "editProfileLink": "Edit saved profile & address",
     "orderSummary": "Order summary",
+    "currencyDisplayNote": "Prices shown in {currency}. Your order total is charged in HKD.",
+    "chargedInHkd": "HKD charge: {amount}",
     "subtotal": "Subtotal",
     "discount": "Discount",
     "deliveryAddress": "Delivery address",
@@ -244,5 +247,8 @@
   },
   "lang": {
     "title": "Language"
+  },
+  "currency": {
+    "title": "Currency"
   }
 }

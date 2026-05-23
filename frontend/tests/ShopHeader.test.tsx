@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { ShopHeader } from "@/components/ShopHeader";
+import { CurrencyProvider } from "@/contexts/currency-context";
 import { LocaleProvider } from "@/contexts/locale-context";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -35,17 +36,23 @@ vi.mock("@/lib/localeSync", async () => {
   };
 });
 
+function renderHeader(tagline?: string) {
+  return render(
+    <LocaleProvider>
+      <CurrencyProvider>
+        <ShopHeader tagline={tagline} />
+      </CurrencyProvider>
+    </LocaleProvider>,
+  );
+}
+
 describe("ShopHeader", () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
   it("renders store title and log in when logged out", () => {
-    render(
-      <LocaleProvider>
-        <ShopHeader />
-      </LocaleProvider>,
-    );
+    renderHeader();
 
     expect(screen.getByRole("heading", { name: /Edward's Store/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /^catalog$/i })).toHaveAttribute("href", "/");
@@ -53,11 +60,7 @@ describe("ShopHeader", () => {
   });
 
   it("shows tagline when provided", () => {
-    render(
-      <LocaleProvider>
-        <ShopHeader tagline="Checkout flow" />
-      </LocaleProvider>,
-    );
+    renderHeader("Checkout flow");
 
     expect(screen.getByText("Checkout flow")).toBeInTheDocument();
   });

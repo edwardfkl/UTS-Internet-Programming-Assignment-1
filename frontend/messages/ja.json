@@ -32,7 +32,8 @@
     "noImage": "画像なし",
     "inStock": "在庫 {count} 件",
     "phoneLabel": "電話：",
-    "openLanguageMenu": "言語"
+    "openLanguageMenu": "言語",
+    "openCurrencyMenu": "通貨"
   },
   "nav": {
     "logIn": "ログイン",
@@ -135,6 +136,8 @@
     "signedInDelivery": "{email} でサインイン中です。お届け先の入力が必要です。",
     "editProfileLink": "保存されたプロフィールと住所を編集",
     "orderSummary": "注文概要",
+    "currencyDisplayNote": "価格は {currency} 表示です。お支払いは HKD で計算されます。",
+    "chargedInHkd": "HKD 請求額：{amount}",
     "subtotal": "小計",
     "discount": "割引",
     "deliveryAddress": "お届け先",
@@ -244,5 +247,8 @@
   },
   "lang": {
     "title": "言語"
+  },
+  "currency": {
+    "title": "通貨"
   }
 }

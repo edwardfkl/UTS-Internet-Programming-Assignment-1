@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { CartPanel } from "@/components/CartPanel";
 import { ShopHeader } from "@/components/ShopHeader";
 import { useAuth } from "@/contexts/auth-context";
+import { useCurrency } from "@/contexts/currency-context";
 import { useLocale } from "@/contexts/locale-context";
 import { useCart } from "@/hooks/useCart";
 import {
@@ -14,7 +15,7 @@ import {
   fetchProductReviews,
   submitProductReview,
 } from "@/lib/api";
-import { money, parsePrice } from "@/lib/money";
+import { parsePrice } from "@/lib/money";
 import type { Product, ProductReview } from "@/lib/types";
 
 function StarRow({
@@ -45,6 +46,7 @@ function StarRow({
 
 export default function ProductPage() {
   const { t, tf } = useLocale();
+  const { formatMoney } = useCurrency();
   const { user } = useAuth();
   const params = useParams();
   const rawId = params.id;
@@ -283,13 +285,13 @@ export default function ProductPage() {
                   </div>
 
                   <p className="mt-4 text-2xl font-semibold tabular-nums text-amber-900">
-                    {money.format(parsePrice(product))}
+                    {formatMoney(parsePrice(product))}
                   </p>
                   {qty > 1 ? (
                     <p className="mt-1 text-sm tabular-nums text-stone-600">
                       × {qty} ={" "}
                       <span className="font-medium text-stone-800">
-                        {money.format(parsePrice(product) * qty)}
+                        {formatMoney(parsePrice(product) * qty)}
                       </span>
                     </p>
                   ) : null}

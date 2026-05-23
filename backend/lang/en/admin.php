@@ -66,6 +66,7 @@ return [
         'title' => 'Users',
         'heading' => 'Users',
         'intro' => 'Registered storefront accounts.',
+        'add' => 'Add user',
         'col_id' => 'ID',
         'col_name' => 'Name',
         'col_email' => 'Email',
@@ -91,6 +92,14 @@ return [
             'deleted' => 'Deleted :count user(s).',
             'status_updated' => 'Updated :count user(s) to ":status".',
             'skipped' => 'Skipped: :list.',
+        ],
+
+        'create' => [
+            'meta_title' => 'New user',
+            'heading' => 'New user',
+            'back' => '← Back to users',
+            'password' => 'Password',
+            'password_hint' => 'Minimum 8 characters.',
         ],
 
         'edit' => [
@@ -181,6 +190,7 @@ return [
         'title' => 'Orders',
         'heading' => 'Orders',
         'intro' => 'Draft carts and placed orders (same orders table).',
+        'add' => 'Add order',
         'filter_status' => 'Status',
         'filter_status_all' => 'All',
         'filter_status_cart' => 'Draft carts only',
@@ -235,6 +245,19 @@ return [
             'col_actions' => 'Actions',
             'subtotal' => 'Subtotal',
             'edit_link' => 'Edit',
+        ],
+
+        'create' => [
+            'meta_title' => 'New order',
+            'heading' => 'New order',
+            'back' => '← Back to orders',
+            'intro' => 'Create a phone or manual order. Stock is deducted when the status is not a draft cart or cancelled.',
+            'status_hint' => 'Draft cart keeps stock in the catalogue; pending payment and later statuses reserve stock.',
+            'placed_at_hint' => 'Leave blank to use the current time for placed orders.',
+            'promo_code' => 'Promo code (optional)',
+            'line_items' => 'Line items',
+            'line_items_hint' => 'Unit prices are taken from the product catalogue at save time.',
+            'product_placeholder' => 'Select product…',
         ],
 
         'edit' => [

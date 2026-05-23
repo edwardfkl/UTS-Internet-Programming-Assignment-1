@@ -16,6 +16,8 @@
             <h1 class="text-2xl font-semibold text-zinc-900">{{ __('admin.users.heading') }}</h1>
             <p class="mt-1 text-sm text-zinc-600">{{ __('admin.users.intro') }}</p>
         </div>
+        <a href="{{ route('admin.users.create') }}"
+           class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">{{ __('admin.users.add') }}</a>
     </div>
 
     <form method="get" action="{{ route('admin.users.index') }}" data-admin-live-search class="mt-6 flex flex-wrap items-end gap-3">

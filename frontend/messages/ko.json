@@ -32,7 +32,8 @@
     "noImage": "이미지 없음",
     "inStock": "재고 {count}개",
     "phoneLabel": "전화:",
-    "openLanguageMenu": "언어"
+    "openLanguageMenu": "언어",
+    "openCurrencyMenu": "통화"
   },
   "nav": {
     "logIn": "로그인",
@@ -135,6 +136,8 @@
     "signedInDelivery": "{email}(으)로 로그인되어 있습니다. 배송 정보를 입력해야 합니다.",
     "editProfileLink": "저장된 프로필·주소 편집",
     "orderSummary": "주문 요약",
+    "currencyDisplayNote": "가격은 {currency}로 표시됩니다. 실제 결제는 HKD 기준입니다.",
+    "chargedInHkd": "HKD 청구 금액: {amount}",
     "subtotal": "소계",
     "discount": "할인",
     "deliveryAddress": "배송 주소",
@@ -244,5 +247,8 @@
   },
   "lang": {
     "title": "언어"
+  },
+  "currency": {
+    "title": "통화"
   }
 }

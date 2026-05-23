@@ -14,8 +14,14 @@
 @endphp
 
 @section('content')
-    <h1 class="text-2xl font-semibold text-zinc-900">{{ __('admin.orders.heading') }}</h1>
-    <p class="mt-2 text-sm text-zinc-600">{{ __('admin.orders.intro') }}</p>
+    <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold text-zinc-900">{{ __('admin.orders.heading') }}</h1>
+            <p class="mt-2 text-sm text-zinc-600">{{ __('admin.orders.intro') }}</p>
+        </div>
+        <a href="{{ route('admin.orders.create') }}"
+           class="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">{{ __('admin.orders.add') }}</a>
+    </div>
 
     <form method="get" action="{{ route('admin.orders.index') }}" data-admin-live-search class="mt-6 flex flex-wrap items-end gap-3">
         <input type="hidden" name="sort" value="{{ $sort }}">
