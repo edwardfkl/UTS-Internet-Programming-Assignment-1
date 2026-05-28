@@ -431,12 +431,12 @@ export default function CheckoutPage() {
                     {formatMoney(totalAfterDiscount)}
                   </span>
                 </div>
-                {currency !== "HKD" ? (
+                {currency !== "AUD" ? (
                   <p className="rounded-lg bg-stone-50 px-3 py-2 text-xs text-stone-600">
                     {tf("checkout.currencyDisplayNote", { currency })}
                     <span className="mt-1 block tabular-nums text-stone-800">
-                      {tf("checkout.chargedInHkd", {
-                        amount: formatMoneyIn(totalAfterDiscount, "HKD"),
+                      {tf("checkout.chargedInAud", {
+                        amount: formatMoneyIn(totalAfterDiscount, "AUD"),
                       })}
                     </span>
                   </p>

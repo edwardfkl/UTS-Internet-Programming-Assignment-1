@@ -1,7 +1,7 @@
 import type { Product } from "./types";
 import {
   CURRENCY_INTL_LOCALE,
-  EXCHANGE_RATES_FROM_HKD,
+  EXCHANGE_RATES_FROM_AUD,
   type AppCurrency,
 } from "./currencies";
 
@@ -9,11 +9,11 @@ export function parsePrice(p: Pick<Product, "price">): number {
   return Number.parseFloat(p.price);
 }
 
-export function convertFromHkd(
-  amountHkd: number,
+export function convertFromAud(
+  amountAud: number,
   currency: AppCurrency,
 ): number {
-  return amountHkd * EXCHANGE_RATES_FROM_HKD[currency];
+  return amountAud * EXCHANGE_RATES_FROM_AUD[currency];
 }
 
 export function createMoneyFormatter(currency: AppCurrency): Intl.NumberFormat {
@@ -23,15 +23,15 @@ export function createMoneyFormatter(currency: AppCurrency): Intl.NumberFormat {
   });
 }
 
-/** Format a catalogue/order amount stored in HKD for display in another currency. */
+/** Format a catalogue/order amount stored in AUD for display in another currency. */
 export function formatMoney(
-  amountHkd: number,
-  currency: AppCurrency = "HKD",
+  amountAud: number,
+  currency: AppCurrency = "AUD",
 ): string {
   return createMoneyFormatter(currency).format(
-    convertFromHkd(amountHkd, currency),
+    convertFromAud(amountAud, currency),
   );
 }
 
 /** @deprecated Use formatMoney(amount, currency) or useCurrency().formatMoney instead. */
-export const money = createMoneyFormatter("HKD");
+export const money = createMoneyFormatter("AUD");

@@ -341,7 +341,7 @@ return [
             'label' => 'Display label (optional)',
             'type' => 'Discount type',
             'amount' => 'Amount',
-            'amount_hint' => 'Use whole amount for "Fixed" (e.g. 10 = HK$10) or percent for "Percentage" (e.g. 15 = 15%).',
+            'amount_hint' => 'Use whole amount for "Fixed" (e.g. 10 = A$10) or percent for "Percentage" (e.g. 15 = 15%).',
             'min_subtotal' => 'Minimum subtotal (optional)',
             'min_subtotal_hint' => 'Cart subtotal must reach this amount before the code applies.',
             'starts_at' => 'Starts at (optional)',

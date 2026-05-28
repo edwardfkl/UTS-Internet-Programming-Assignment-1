@@ -36,7 +36,7 @@ function readStoredCurrency(): AppCurrency {
 type CurrencyContextValue = {
   currency: AppCurrency;
   setCurrency: (next: AppCurrency) => void;
-  formatMoney: (amountHkd: number) => string;
+  formatMoney: (amountAud: number) => string;
 };
 
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
@@ -57,7 +57,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const formatMoney = useCallback(
-    (amountHkd: number) => formatMoneyLib(amountHkd, currency),
+    (amountAud: number) => formatMoneyLib(amountAud, currency),
     [currency],
   );
 

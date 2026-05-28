@@ -84,7 +84,7 @@
                                 {{ __('admin.products.status_labels.'.$product->status) }}
                             </span>
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3 tabular-nums">{{ number_format((float) $product->price, 2) }}</td>
+                        <td class="whitespace-nowrap px-4 py-3 tabular-nums"><x-aud-money :amount="$product->price" /></td>
                         <td class="whitespace-nowrap px-4 py-3 tabular-nums">{{ $product->stock }}</td>
                         <td class="whitespace-nowrap px-4 py-3 text-zinc-600"><x-local-datetime :at="$product->created_at"/></td>
                         <td class="whitespace-nowrap px-4 py-3 text-zinc-600"><x-local-datetime :at="$product->updated_at"/></td>

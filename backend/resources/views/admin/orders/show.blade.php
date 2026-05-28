@@ -44,11 +44,11 @@
         <div>
             <dt class="font-medium text-zinc-600">{{ __('admin.orders.show.total') }}</dt>
             <dd class="mt-1 text-zinc-900 tabular-nums">
-                {{ number_format((float) $order->subtotal_amount, 2) }}
+                <x-aud-money :amount="$order->subtotal_amount" />
                 @if ((float) $order->discount_amount > 0)
-                    − {{ number_format((float) $order->discount_amount, 2) }}
+                    − <x-aud-money :amount="$order->discount_amount" />
                 @endif
-                = <strong>{{ number_format((float) $order->total_amount, 2) }}</strong>
+                = <strong><x-aud-money :amount="$order->total_amount" /></strong>
             </dd>
         </div>
     </dl>
@@ -87,9 +87,9 @@
                         @endif
                     </td>
                     <td class="whitespace-nowrap px-4 py-3 tabular-nums">{{ $item->quantity }}</td>
-                    <td class="whitespace-nowrap px-4 py-3 tabular-nums">{{ number_format((float) $item->unit_price, 2) }}</td>
+                    <td class="whitespace-nowrap px-4 py-3 tabular-nums"><x-aud-money :amount="$item->unit_price" /></td>
                     <td class="whitespace-nowrap px-4 py-3 text-right tabular-nums">
-                        {{ number_format((float) $item->unit_price * (int) $item->quantity, 2) }}
+                        <x-aud-money :amount="(float) $item->unit_price * (int) $item->quantity" />
                     </td>
                     <td class="whitespace-nowrap px-4 py-3 text-right">
                         <a href="{{ route('admin.order-items.edit', $item) }}" class="font-medium text-amber-900 hover:underline">{{ __('admin.orders.show.edit_link') }}</a>
@@ -100,7 +100,7 @@
             <tfoot>
             <tr class="bg-zinc-50 font-medium">
                 <td colspan="4" class="px-4 py-3 text-right">{{ __('admin.orders.show.subtotal') }}</td>
-                <td class="whitespace-nowrap px-4 py-3 text-right tabular-nums">{{ number_format($lineTotal, 2) }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-right tabular-nums"><x-aud-money :amount="$lineTotal" /></td>
             </tr>
             </tfoot>
         </table>

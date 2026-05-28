@@ -18,7 +18,7 @@
             <select id="product_id" name="product_id" required class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 shadow-sm">
                 @foreach ($products as $p)
                     <option value="{{ $p->id }}" @selected((int) old('product_id', $orderItem->product_id) === $p->id)>
-                        #{{ $p->id }} — {{ $p->name }} (${{ number_format((float) $p->price, 2) }})
+                        #{{ $p->id }} — {{ $p->name }} ({{ \App\Support\Money::formatAud($p->price) }})
                     </option>
                 @endforeach
             </select>

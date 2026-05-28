@@ -80,11 +80,11 @@
                             @if ($promo->type === \App\Models\PromoCode::TYPE_PERCENT)
                                 {{ rtrim(rtrim(number_format((float) $promo->amount, 2), '0'), '.') }}%
                             @else
-                                {{ number_format((float) $promo->amount, 2) }}
+                                {{ \App\Support\Money::formatAud($promo->amount) }}
                             @endif
                             @if ($promo->min_subtotal !== null)
                                 <div class="text-xs text-zinc-500">
-                                    {{ __('admin.promo_codes.min_short', ['amount' => number_format((float) $promo->min_subtotal, 2)]) }}
+                                    {{ __('admin.promo_codes.min_short', ['amount' => \App\Support\Money::formatAud($promo->min_subtotal)]) }}
                                 </div>
                             @endif
                         </td>

@@ -4,7 +4,7 @@
 
 ## What this app is, and what problem it solves
 
-**Edward's Online Store** is a minimal but production-shaped e‑commerce storefront aimed at small Australian retailers (a cafe, studio, boutique, or single-brand workshop) who want to sell a focused catalogue — roughly 10–200 SKUs — online with their own URL, their own checkout copy, and without paying SaaS-tier fees per month.
+**Edward's Online Store** is a minimal but production-shaped e‑commerce storefront aimed at small Australian retailers (a cafe, studio, boutique, or single-brand workshop) who want to sell a focused catalogue — roughly 10–200 SKUs — online with their own URL, their own checkout copy, and without paying SaaS-tier fees per month. Catalogue prices and order totals are stored in **AUD**; the storefront can optionally show other currencies for visitors while checkout is always charged in Australian dollars.
 
 ### The business problem
 
@@ -238,7 +238,7 @@ The REST paths are `/api/cart/...`, but persistence is **orders + order_items**,
 
 Guest carts are identified by an `X-Cart-Token` header (UUID). The SPA stores that token in `localStorage`, while **cart lines are persisted in the database** under `orders` / `order_items`. To reopen the same cart after clearing site data or on another device, use the UI **Copy cart link** or open the site with `?cart=<uuid>` (the query param is read once and then removed from the address bar).
 
-**Routes:** `/` — catalogue + cart sidebar; **live catalogue search** (debounced) calls the API with `q` as you type. `/products/[id]` — product detail; `/checkout` — English checkout (ATM / PayID / BPAY placeholders; redirects to login if not authenticated); confirmation screen after **Place order**.
+**Routes:** `/` — catalogue + cart sidebar; **live catalogue search** (debounced) calls the API with `q` as you type. `/products/[id]` — product detail; `/checkout` — checkout with demo bank-transfer payment placeholders (AUD totals; redirects to login if not authenticated); confirmation screen after **Place order**.
 
 **Admin orders:** the orders list supports a **status** filter (`All` / **Draft carts only** / **Pending payment only**) so tutors can isolate in-progress carts (Assignment 2 “view all users’ shopping carts”).
 

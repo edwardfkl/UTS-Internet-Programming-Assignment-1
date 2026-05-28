@@ -20,4 +20,15 @@ describe("authToken storage", () => {
     clearAuthToken();
     expect(getAuthToken()).toBeNull();
   });
+
+  it("overwrites an existing token", () => {
+    setAuthToken("first-token");
+    setAuthToken("second-token");
+    expect(getAuthToken()).toBe("second-token");
+  });
+
+  it("clearAuthToken is safe when nothing is stored", () => {
+    expect(() => clearAuthToken()).not.toThrow();
+    expect(getAuthToken()).toBeNull();
+  });
 });

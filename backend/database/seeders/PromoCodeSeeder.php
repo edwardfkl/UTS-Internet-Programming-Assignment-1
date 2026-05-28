@@ -12,7 +12,7 @@ class PromoCodeSeeder extends Seeder
         $rows = [
             [
                 'code' => 'WELCOME10',
-                'label' => 'Welcome — HK$10 off',
+                'label' => 'Welcome — A$10 off',
                 'type' => 'fixed',
                 'amount' => 10.00,
                 'min_subtotal' => null,
@@ -20,7 +20,7 @@ class PromoCodeSeeder extends Seeder
             ],
             [
                 'code' => 'SAVE20',
-                'label' => 'HK$20 off your order',
+                'label' => 'A$20 off your order',
                 'type' => 'fixed',
                 'amount' => 20.00,
                 'min_subtotal' => 100.00,

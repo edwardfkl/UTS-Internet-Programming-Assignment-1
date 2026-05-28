@@ -91,7 +91,7 @@
                                             <option value="{{ $p->id }}"
                                                     data-stock="{{ $p->stock }}"
                                                     @selected((string) ($row['product_id'] ?? '') === (string) $p->id)>
-                                                {{ $p->name }} — ${{ number_format((float) $p->price, 2) }}
+                                                {{ $p->name }} — {{ \App\Support\Money::formatAud($p->price) }}
                                                 @if ($p->status !== \App\Models\Product::STATUS_ACTIVE)
                                                     ({{ __('admin.products.status_labels.'.$p->status) }})
                                                 @endif
